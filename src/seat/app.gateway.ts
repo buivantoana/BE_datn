@@ -11,6 +11,7 @@ import { Booking } from '../booking/schema/booking.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Screenings } from 'src/screenings/schema/screenings.schema';
+import { User } from 'src/user/schema/user.schema';
 
 @WebSocketGateway({
   cors: {
@@ -21,6 +22,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(
     @InjectModel(Screenings.name)
     private readonly bookingModel: Model<Screenings>,
+    @InjectModel(User.name) private readonly userModel: Model<User>,
   ) {}
   @WebSocketServer() server: Server;
 
@@ -97,8 +99,6 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('unpaidseat')
   async handleUnpaid(client: Socket, payload: any) {
     try {
-      
-
       const data = await this.bookingModel
         .find({ _id: payload.id })
         .populate(['movies', 'cinemas'])
@@ -122,7 +122,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
       let dataupdate = {
         timeSlots: arrnew,
       };
-      
+
       const update = await this.bookingModel.findByIdAndUpdate(
         payload.id,
         dataupdate,
@@ -130,12 +130,22 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
       );
 
       if (update) {
-      this.server
-        .to(`${payload.id.toString()}-${payload.time}`)
-        .emit('bookingseatunpaid', payload.seats);
+        this.server
+          .to(`${payload.id.toString()}-${payload.time}`)
+          .emit('bookingseatunpaid', payload.seats);
       } else {
         console.log('Comment not found');
       }
+    } catch (error) {
+      console.error('Error updating comment in the database:', error);
+    }
+  }
+
+  @SubscribeMessage('editPermission')
+  async handleEditPermission(client: Socket, payload: any) {
+    try {
+      const data = await this.userModel.findById(payload.id);
+      this.server.emit("confirmEditPermission",{email:data.email})
     } catch (error) {
       console.error('Error updating comment in the database:', error);
     }

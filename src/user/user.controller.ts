@@ -1,17 +1,24 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
+  Param,
   Post,
+  Put,
   Req,
   Res,
+  UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { SigninDto, SignupDto } from './dto/user.dto';
+import { SigninDto, SignupDto, idUserDto } from './dto/user.dto';
 import { UserService } from './user.service';
+import { JwtAuthGuard } from 'src/guards/auth.guards';
+import { Roles } from 'src/guards/role.decorator';
 
 @Controller('auth')
+@UseGuards(JwtAuthGuard)
 export class UserController {
   constructor(private userService: UserService) {}
   @Post('signup')
@@ -21,8 +28,23 @@ export class UserController {
     user: SignupDto,
   ) {
     try {
-      console.log(user);
       return await this.userService.signup(user);
+    } catch (error) {
+      return {
+        status: 1,
+        message: 'create user faild',
+        error,
+      };
+    }
+  }
+  @Post('create')
+  async create(
+    // @Res() res: Response,
+    @Body(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
+    user: SignupDto,
+  ) {
+    try {
+      return await this.userService.create(user);
     } catch (error) {
       return {
         status: 1,
@@ -62,6 +84,50 @@ export class UserController {
       if (token) {
         return await this.userService.refeshtoken(token);
       }
+    } catch (error) {
+      return {
+        status: 1,
+        message: error,
+      };
+    }
+  }
+
+  @Get('')
+  @Roles('create_user')
+  async fillAllUser() {
+    try {
+      return await this.userService.fillAllUser();
+    } catch (error) {
+      return {
+        status: 1,
+        message: error,
+      };
+    }
+  }
+  @Delete(':id')
+  @Roles('delete_user')
+  async deleteUser(
+    @Param('id', new ValidationPipe({ transform: true }))
+    id: idUserDto,
+  ) {
+    try {
+      return await this.userService.deleteUser(String(id));
+    } catch (error) {
+      return {
+        status: 1,
+        message: error,
+      };
+    }
+  }
+  @Put(':id')
+  async updateUser(
+    @Param('id', new ValidationPipe({ transform: true }))
+    id: idUserDto,
+    @Body(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
+    user: SignupDto,
+  ) {
+    try {
+      return await this.userService.updateUser(String(id), user);
     } catch (error) {
       return {
         status: 1,

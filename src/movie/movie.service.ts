@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Movie } from './schema/movie.schema';
 import { IMovie } from './interface/movie.interface';
+import { format, isAfter, parseISO } from 'date-fns';
 
 @Injectable()
 export class MovieService {
@@ -70,6 +71,7 @@ export class MovieService {
       console.log(error);
     }
   }
+
   async fillSimilarMovie(id: string) {
     try {
       let data = await this.MovieModel.find({ genders: id }).exec();
@@ -125,6 +127,57 @@ export class MovieService {
       };
     } catch (error) {
       console.log(error);
+    }
+  }
+  async fillScrollMovie(type: string, pagePrams: number, res: any) {
+    const cursor = pagePrams || 0;
+    const currentDate = new Date();
+    const pageSize = 3;
+
+    if (type === 'release_date') {
+      const totalPage = await this.MovieModel.countDocuments({
+        release_date: { $lt: format(currentDate, 'yyyy-MM-dd') },
+      });
+      let moviesQuery = await this.MovieModel.find({
+        release_date: { $lt: format(currentDate, 'yyyy-MM-dd') },
+      })
+        .skip(cursor)
+        .limit(pageSize)
+        .exec();
+
+      const nextId = cursor + pageSize < totalPage ? cursor + pageSize : null;
+      const previousId = cursor >= pageSize ? cursor - pageSize : null;
+
+      let datatotal = { data: moviesQuery, nextId, previousId };
+      if (cursor === 0) {
+        return res.json(datatotal);
+      } else {
+        setTimeout(() => {
+          return res.json(datatotal);
+        }, 1000);
+      }
+    } else {
+      const totalPage = await this.MovieModel.countDocuments({
+        release_date: { $gt: format(currentDate, 'yyyy-MM-dd') },
+      });
+      let moviesQuery = await this.MovieModel.find({
+        release_date: { $gt: format(currentDate, 'yyyy-MM-dd') },
+      })
+        .skip(cursor)
+        .limit(pageSize)
+        .exec();
+
+      const nextId = cursor + pageSize < totalPage ? cursor + pageSize : null;
+      const previousId = cursor >= pageSize ? cursor - pageSize : null;
+
+      let datatotal = { data: moviesQuery, nextId, previousId };
+      if (cursor === 0) {
+        return res.json(datatotal);
+      } else {
+        setTimeout(() => {
+          return res.json(datatotal);
+        }, 1000);
+      }
     }
   }
 }

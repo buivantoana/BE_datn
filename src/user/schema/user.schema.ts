@@ -7,7 +7,7 @@ export class User extends Document {
   email: string;
   @Prop()
   password: string;
-  @Prop({ default: 'MEMBER', enum: ['MEMBER', 'MANAGE', 'ADMIN'] })
+  @Prop({ default: 'member' })
   role: string;
 }
 

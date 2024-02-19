@@ -14,6 +14,9 @@ import { FoodModule } from './food/food.module';
 import { MailModule } from './mail/mail.module';
 import { PostModule } from './post/post.module';
 import { VnpayModule } from './vnpay/vnpay.module';
+import { RoleModule } from './role/role.module';
+import { PermissionModule } from './permission/permission.module';
+import { RolePermissionModule } from './role_permission/role_permission.module';
 
 @Module({
   imports: [
@@ -29,6 +32,9 @@ import { VnpayModule } from './vnpay/vnpay.module';
     MailModule,
     PostModule,
     VnpayModule,
+    RoleModule,
+    PermissionModule,
+    RolePermissionModule,
   ],
 })
 export class AppModule {

@@ -5,6 +5,8 @@ export class SignupDto {
   @IsNotEmpty()
   @IsEmail()
   readonly email: string;
+  @IsString()
+  readonly role?: string;
 }
 export class SigninDto {
   @IsString()
@@ -14,4 +16,7 @@ export class SigninDto {
   @IsString()
   @IsNotEmpty()
   readonly password: string;
+}
+export class idUserDto {
+  readonly id: string;
 }

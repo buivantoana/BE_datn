@@ -87,12 +87,27 @@ export class MovieController {
     }
   }
 
-  @Get(':id')
+  @Get('onemovie/:id')
   async fillOneMovie(
     @Param('id', new ValidationPipe({ transform: true })) id: idmovieDto,
   ) {
     try {
       return await this.MovieService.fillOneMovie(String(id));
+    } catch (error) {
+      return {
+        status: 1,
+        message: error,
+      };
+    }
+  }
+  @Get('scrollmovie')
+  async fillScrollMovie(@Req() req: Request, @Res() res: Response) {
+    try {
+      return await this.MovieService.fillScrollMovie(
+        String(req.query.type),
+        Number(req.query.cursor),
+        res
+      );
     } catch (error) {
       return {
         status: 1,

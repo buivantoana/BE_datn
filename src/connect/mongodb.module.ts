@@ -3,7 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 
 @Module({
-  imports: [MongooseModule.forRoot('mongodb://127.0.0.1:27017/ticket_movie')],
+  imports: [MongooseModule.forRoot('mongodb://127.0.0.1:27017/f8')],
 })
 export class MongodbConnect implements OnModuleInit {
   async onModuleInit() {

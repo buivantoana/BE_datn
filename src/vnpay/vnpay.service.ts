@@ -3,13 +3,10 @@ import { InjectModel } from '@nestjs/mongoose';
 
 import * as moment from 'moment';
 import { Model } from 'mongoose';
-import { Booking } from 'src/booking/schema/booking.schema';
 
 @Injectable()
 export class VnPayService {
-  constructor(
-    @InjectModel(Booking.name) private readonly bookingModel: Model<Booking>,
-  ) {}
+  constructor() {}
   createVnpay(req, res) {
     process.env.TZ = 'Asia/Ho_Chi_Minh';
 

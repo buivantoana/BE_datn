@@ -3,15 +3,19 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Lesson } from './schema/lesson.chema';
 import { ILesson } from './interface/lesson.interface';
+import { Courses } from 'src/courses/schema/courses.schema';
 
 @Injectable()
 export class LessonService {
   constructor(
     @InjectModel(Lesson.name)
     private readonly lessonModel: Model<Lesson>,
+    @InjectModel(Courses.name)
+    private readonly coursesModel: Model<Courses>,
   ) {}
   async createLesson(lesson: ILesson) {
     try {
+
       let data = await this.lessonModel.create(lesson);
       if (!data) {
         return {
@@ -19,6 +23,7 @@ export class LessonService {
           message: 'failed',
         };
       }
+      await this.coursesModel.updateOne({ _id: lesson.courses_id[0] }, { $push: { lesson: data._id } });
       return {
         status: 0,
         message: 'suceess',
@@ -28,11 +33,19 @@ export class LessonService {
       console.log(error);
     }
   }
-  async updateLesson(id: string, lesson: ILesson) {
+  async updateLesson(id: string, lesson: any) {
     try {
-      let data = await this.lessonModel.findByIdAndUpdate(id, lesson, {
+      console.log(lesson);
+      let data = await this.lessonModel.findByIdAndUpdate(id, lesson.lesson, {
         new: true,
       });
+      if(lesson.changeCourses){
+        await this.coursesModel.updateOne({ _id: lesson.lesson.courses_id[0] }, { $push: { lesson: id } });
+        await this.coursesModel.updateOne(
+          { _id: lesson.coursesOld },
+          { $pull: { lesson: id } }
+        );
+      }
       if (!data) {
         return {
           status: 1,
@@ -48,7 +61,7 @@ export class LessonService {
       console.log(error);
     }
   }
-  async deleteLesson(id: string) {
+  async deleteLesson(id: string,idCourses:string) {
     try {
       let data = await this.lessonModel.findByIdAndDelete(id);
       if (!data) {
@@ -57,6 +70,10 @@ export class LessonService {
           message: 'failed',
         };
       }
+      await this.coursesModel.updateOne(
+        { _id: idCourses },
+        { $pull: { lesson: id } }
+      );
       return {
         status: 0,
         message: 'suceess',

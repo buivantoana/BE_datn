@@ -70,7 +70,13 @@ export class CoursesService {
     try {
       let data = await this.coursesModel
         .find({})
-        .populate('category_id')
+        .populate(['category_id',{
+          path: 'lesson',
+          populate: {
+            path: 'sub_lesson',
+            model: 'SubLesson',
+          },
+        }])
         .lean()
         .exec();
 

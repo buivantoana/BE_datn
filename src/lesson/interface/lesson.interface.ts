@@ -4,4 +4,5 @@ export interface ILesson {
   duration: number;
   sub_lesson: string[];
   courses_id: string[];
+  changeCourses?:boolean
 }

@@ -23,11 +23,7 @@ export class SubLesson extends Document {
   @Prop()
   content_code?: string;
   @Prop()
-  prompt?: string;
-  @Prop()
-  exercise?: string;
-  @Prop()
-  solution?: string;
+  solution_key?: string;
   @Prop()
   type_exercise?: string;
 }

@@ -36,7 +36,7 @@ export class LessonController {
   async updateLesson(
     @Param('id', new ValidationPipe({ transform: true })) id: idLessonDto,
     @Body(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
-    lesson: LessonDto,
+    lesson: any,
   ) {
     try {
       return await this.lessonService.updateLesson(String(id), lesson);
@@ -47,12 +47,13 @@ export class LessonController {
       };
     }
   }
-  @Delete(':id')
+  @Delete(':id/:idCourses')
   async deleteLesson(
     @Param('id', new ValidationPipe({ transform: true })) id: idLessonDto,
+    @Param('idCourses') idCourses: string,
   ) {
     try {
-      return await this.lessonService.deleteLesson(String(id));
+      return await this.lessonService.deleteLesson(String(id),String(idCourses));
     } catch (error) {
       return {
         status: 1,

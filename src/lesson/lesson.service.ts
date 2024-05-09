@@ -68,7 +68,9 @@ export class LessonService {
   }
   async findAllLesson() {
     try {
-      let data = await this.lessonModel.find({});
+      let data = await this.lessonModel.find({}).populate('courses_id')
+      .lean()
+      .exec();;
 
       if (!data) {
         return {

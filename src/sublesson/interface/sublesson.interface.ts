@@ -3,4 +3,5 @@ export interface ISubLesson {
   description: String;
   duration: number;
   type: string;
+  lesson: string[];
 }

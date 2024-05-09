@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsArray, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class SubLessonDto {
   @IsString()
@@ -10,6 +10,8 @@ export class SubLessonDto {
   readonly duration: number;
   @IsString()
   readonly type: string;
+  @IsArray()
+  readonly lesson: [string];
 }
 export class idSubLessonDto {
   readonly id: string;

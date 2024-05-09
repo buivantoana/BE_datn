@@ -4,14 +4,17 @@ import { Model } from 'mongoose';
 
 import { SubLesson } from './schema/sublesson.schema';
 import { ISubLesson } from './interface/sublesson.interface';
+import { Lesson } from 'src/lesson/schema/lesson.chema';
 
 @Injectable()
 export class SubLessonService {
   constructor(
     @InjectModel(SubLesson.name)
     private readonly sublessonModel: Model<SubLesson>,
+    @InjectModel(Lesson.name)
+    private readonly lessonModel: Model<Lesson>,
   ) {}
-  async createSubLesson(sublesson) {
+  async createSubLesson(sublesson: any) {
     try {
       let data = await this.sublessonModel.create(sublesson);
       if (!data) {
@@ -20,6 +23,10 @@ export class SubLessonService {
           message: 'failed',
         };
       }
+      await this.lessonModel.updateOne(
+        { _id: sublesson.lesson[0] },
+        { $push: { sub_lesson: data._id } },
+      );
       return {
         status: 0,
         message: 'suceess',

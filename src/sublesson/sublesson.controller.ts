@@ -21,10 +21,11 @@ export class SubLessonController {
   @Post('')
   async createSubLesson(
     @Body(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
-    lesson,
+    lesson: any,
   ) {
     try {
       return await this.subLessonService.createSubLesson(lesson);
+      
     } catch (error) {
       return {
         status: 1,

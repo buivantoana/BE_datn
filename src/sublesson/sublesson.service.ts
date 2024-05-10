@@ -36,11 +36,29 @@ export class SubLessonService {
       console.log(error);
     }
   }
-  async updateSubLesson(id: string, sublesson: ISubLesson) {
+  async updateSubLesson(id: string, sublesson: any) {
     try {
-      let data = await this.sublessonModel.findByIdAndUpdate(id, sublesson, {
-        new: true,
-      });
+      
+      let data: any;
+      if (sublesson.change) {
+        await this.sublessonModel.findOneAndReplace(
+          { _id: id },
+          sublesson.body,
+          { returnOriginal: false, upsert: true },
+        );
+      } else {
+        data = await this.sublessonModel.findByIdAndUpdate(id, sublesson.body, {
+          new: true,
+        });
+      }
+      if(sublesson.changeLesson){
+        await this.lessonModel.updateOne({ _id: sublesson.body.lesson[0] }, { $push: { sub_lesson: id } });
+        await this.lessonModel.updateOne(
+          { _id: sublesson.lessonIdOld },
+          { $pull: { sub_lesson: id } }
+        );
+      }
+      
       if (!data) {
         return {
           status: 1,
@@ -56,7 +74,7 @@ export class SubLessonService {
       console.log(error);
     }
   }
-  async deleteSubLesson(id: string) {
+  async deleteSubLesson(id: string, idLesson: string) {
     try {
       let data = await this.sublessonModel.findByIdAndDelete(id);
       if (!data) {
@@ -65,6 +83,10 @@ export class SubLessonService {
           message: 'failed',
         };
       }
+      await this.lessonModel.updateOne(
+        { _id: idLesson },
+        { $pull: { sub_lesson: id } },
+      );
       return {
         status: 0,
         message: 'suceess',

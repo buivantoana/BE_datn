@@ -53,6 +53,21 @@ export class CoursesController {
       };
     }
   }
+  @Put('arrange/:id')
+  async updateArrangeCourses(
+    @Param('id', new ValidationPipe({ transform: true })) id: idCoursesDto,
+    @Body(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
+    courses: any,
+  ) {
+    try {
+      return await this.coursesService.updateArrangeCourses(String(id), courses);
+    } catch (error) {
+      return {
+        status: 1,
+        message: error,
+      };
+    }
+  }
   @Delete(':id')
   async deleteCourses(
     @Param('id', new ValidationPipe({ transform: true })) id: idCoursesDto,

@@ -35,7 +35,7 @@ export class LessonService {
   }
   async updateLesson(id: string, lesson: any) {
     try {
-      console.log(lesson);
+     
       let data = await this.lessonModel.findByIdAndUpdate(id, lesson.lesson, {
         new: true,
       });
@@ -46,6 +46,26 @@ export class LessonService {
           { $pull: { lesson: id } }
         );
       }
+      if (!data) {
+        return {
+          status: 1,
+          message: 'failed',
+        };
+      }
+      return {
+        status: 0,
+        message: 'suceess',
+        data,
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async updateArrangeLesson(id: string, lesson: any) {
+    try {
+      let data = await this.lessonModel.findOneAndUpdate({ _id: id }, { $set: { sub_lesson: lesson } },
+      { returnOriginal: false });
+      
       if (!data) {
         return {
           status: 1,

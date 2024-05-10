@@ -95,6 +95,26 @@ export class CoursesService {
       console.log(error);
     }
   }
+  async updateArrangeCourses(id: string, lesson: any) {
+    try {
+      let data = await this.coursesModel.findOneAndUpdate({ _id: id }, { $set: { lesson: lesson } },
+      { returnOriginal: false });
+      
+      if (!data) {
+        return {
+          status: 1,
+          message: 'failed',
+        };
+      }
+      return {
+        status: 0,
+        message: 'suceess',
+        data,
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  }
   async findOneCourses(id: string) {
     try {
       let data = await this.coursesModel.findById(id);

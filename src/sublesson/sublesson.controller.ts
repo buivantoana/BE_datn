@@ -37,7 +37,7 @@ export class SubLessonController {
   async updateSubLesson(
     @Param('id', new ValidationPipe({ transform: true })) id: idSubLessonDto,
     @Body(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
-    lesson: SubLessonDto,
+    lesson: any,
   ) {
     try {
       return await this.subLessonService.updateSubLesson(String(id), lesson);
@@ -48,12 +48,13 @@ export class SubLessonController {
       };
     }
   }
-  @Delete(':id')
+  @Delete(':id/:idLesson')
   async deleteSubLesson(
     @Param('id', new ValidationPipe({ transform: true })) id: idSubLessonDto,
+    @Param('idLesson') idLesson: string,
   ) {
     try {
-      return await this.subLessonService.deleteSubLesson(String(id));
+      return await this.subLessonService.deleteSubLesson(String(id),String(idLesson));
     } catch (error) {
       return {
         status: 1,

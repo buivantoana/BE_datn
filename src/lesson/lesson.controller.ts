@@ -47,6 +47,21 @@ export class LessonController {
       };
     }
   }
+  @Put('arrange/:id')
+  async updateArrangeLesson(
+    @Param('id', new ValidationPipe({ transform: true })) id: idLessonDto,
+    @Body(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
+    lesson: any,
+  ) {
+    try {
+      return await this.lessonService.updateArrangeLesson(String(id), lesson);
+    } catch (error) {
+      return {
+        status: 1,
+        message: error,
+      };
+    }
+  }
   @Delete(':id/:idCourses')
   async deleteLesson(
     @Param('id', new ValidationPipe({ transform: true })) id: idLessonDto,

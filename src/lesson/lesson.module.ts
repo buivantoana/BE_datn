@@ -4,11 +4,18 @@ import { Lesson, LessonModel } from './schema/lesson.chema';
 import { LessonController } from './lesson.controller';
 import { LessonService } from './lesson.service';
 import { Courses, CoursesModel } from 'src/courses/schema/courses.schema';
+import {
+  SubLesson,
+  SubLessonModel,
+} from 'src/sublesson/schema/sublesson.schema';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Lesson.name, schema: LessonModel }]),
     MongooseModule.forFeature([{ name: Courses.name, schema: CoursesModel }]),
+    MongooseModule.forFeature([
+      { name: SubLesson.name, schema: SubLessonModel },
+    ]),
   ],
   controllers: [LessonController],
   providers: [LessonService],

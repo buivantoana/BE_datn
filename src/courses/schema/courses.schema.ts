@@ -26,6 +26,10 @@ export class Courses extends Document {
   price: number;
   @Prop({ required: true })
   rating: number;
+  @Prop({ required: true })
+  result_courses: string[];
+  @Prop({ required: true })
+  courses_requirements: string[];
   @Prop({ type: [{ type: MongooseSchema.Types.ObjectId, ref: 'Categories' }] })
   category_id: Categories[];
   @Prop({ type: [{ type: MongooseSchema.Types.ObjectId, ref: 'User' }] })

@@ -3,12 +3,18 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Courses } from './schema/courses.schema';
 import { ICourses } from './interface/courses.interface';
+import { Lesson } from 'src/lesson/schema/lesson.chema';
+import { SubLesson } from 'src/sublesson/schema/sublesson.schema';
 
 @Injectable()
 export class CoursesService {
   constructor(
     @InjectModel(Courses.name)
     private readonly coursesModel: Model<Courses>,
+    @InjectModel(Lesson.name)
+    private readonly lessonModel: Model<Lesson>,
+    @InjectModel(SubLesson.name)
+    private readonly sublessonModel: Model<SubLesson>,
   ) {}
   async createCourses(courses: ICourses) {
     try {
@@ -50,13 +56,43 @@ export class CoursesService {
   }
   async deleteCourses(id: string) {
     try {
+      let datadelete = await this.coursesModel
+        .findById(id)
+        .populate([
+          'category_id',
+          {
+            path: 'lesson',
+            populate: {
+              path: 'sub_lesson',
+              model: 'SubLesson',
+            },
+          },
+        ])
+        .lean()
+        .exec();
+      if (!datadelete) {
+        return {
+          status: 1,
+          message: 'failed',
+        };
+      }
+      datadelete.lesson.map(async (item: any) => {
+        await this.lessonModel.findByIdAndDelete(item._id);
+        if (item.sub_lesson[0]) {
+          for (let i = 0; i < item.sub_lesson.length; i++) {
+            await this.sublessonModel.findByIdAndDelete(item.sub_lesson[i]._id);
+          }
+        }
+      });
       let data = await this.coursesModel.findByIdAndDelete(id);
+
       if (!data) {
         return {
           status: 1,
           message: 'failed',
         };
       }
+
       return {
         status: 0,
         message: 'suceess',
@@ -70,13 +106,16 @@ export class CoursesService {
     try {
       let data = await this.coursesModel
         .find({})
-        .populate(['category_id',{
-          path: 'lesson',
-          populate: {
-            path: 'sub_lesson',
-            model: 'SubLesson',
+        .populate([
+          'category_id',
+          {
+            path: 'lesson',
+            populate: {
+              path: 'sub_lesson',
+              model: 'SubLesson',
+            },
           },
-        }])
+        ])
         .lean()
         .exec();
 
@@ -97,9 +136,12 @@ export class CoursesService {
   }
   async updateArrangeCourses(id: string, lesson: any) {
     try {
-      let data = await this.coursesModel.findOneAndUpdate({ _id: id }, { $set: { lesson: lesson } },
-      { returnOriginal: false });
-      
+      let data = await this.coursesModel.findOneAndUpdate(
+        { _id: id },
+        { $set: { lesson: lesson } },
+        { returnOriginal: false },
+      );
+
       if (!data) {
         return {
           status: 1,

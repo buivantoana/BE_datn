@@ -8,4 +8,6 @@ export interface ICourses {
   category_id: string[];
   students: string[];
   lesson: string[];
+  result_courses: string[];
+  courses_requirements: string[];
 }

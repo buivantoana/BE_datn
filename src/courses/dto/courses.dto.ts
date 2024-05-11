@@ -26,6 +26,10 @@ export class CoursesDto {
   readonly students: [string];
   @IsArray()
   readonly lesson: [string];
+  @IsArray()
+  readonly result_courses: [string];
+  @IsArray()
+  readonly courses_requirements: [string];
 }
 export class CoursesDtoUpdate {
   @IsString()
@@ -41,6 +45,10 @@ export class CoursesDtoUpdate {
   readonly price: number;
   @IsArray()
   readonly category_id: [string];
+  @IsArray()
+  readonly result_courses: [string];
+  @IsArray()
+  readonly courses_requirements: [string];
 }
 
 export class idCoursesDto {

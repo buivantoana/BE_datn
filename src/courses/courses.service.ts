@@ -159,7 +159,20 @@ export class CoursesService {
   }
   async findOneCourses(id: string) {
     try {
-      let data = await this.coursesModel.findById(id);
+      let data = await this.coursesModel
+        .findById(id)
+        .populate([
+          'category_id',
+          {
+            path: 'lesson',
+            populate: {
+              path: 'sub_lesson',
+              model: 'SubLesson',
+            },
+          },
+        ])
+        .lean()
+        .exec();
       if (!data) {
         return {
           status: 1,

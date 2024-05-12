@@ -3,7 +3,11 @@ import { MongooseModule } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 
 @Module({
-  imports: [MongooseModule.forRoot('mongodb://127.0.0.1:27017/f8')],
+  imports: [
+    MongooseModule.forRoot(
+      'mongodb+srv://root:123@cluster0.pnvccqv.mongodb.net/?retryWrites=true&w=majority',
+    ),
+  ],
 })
 export class MongodbConnect implements OnModuleInit {
   async onModuleInit() {

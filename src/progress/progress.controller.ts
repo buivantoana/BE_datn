@@ -32,12 +32,13 @@ export class ProgressController {
       };
     }
   }
-  @Get(':id')
+  @Get(':id/:courses_id')
   async findOneProgress(
     @Param('id', new ValidationPipe({ transform: true })) id: idProgressDto,
+    @Param('courses_id', new ValidationPipe({ transform: true })) courses_id: idProgressDto,
   ) {
     try {
-      return await this.progressService.findOneProgress(String(id));
+      return await this.progressService.findOneProgress(String(id),String(courses_id));
     } catch (error) {
       return {
         status: 1,
@@ -45,19 +46,23 @@ export class ProgressController {
       };
     }
   }
-  //   @Put(':id')
-  //   async updateLesson(
-  //     @Param('id', new ValidationPipe({ transform: true })) id: idLessonDto,
-  //     @Body(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
-  //     lesson: any,
-  //   ) {
-  //     try {
-  //       return await this.lessonService.updateLesson(String(id), lesson);
-  //     } catch (error) {
-  //       return {
-  //         status: 1,
-  //         message: error,
-  //       };
-  //     }
-  //   }
+  @Put(':id')
+  async updateProgress(
+    @Param('id', new ValidationPipe({ transform: true })) id: idProgressDto,
+    @Body(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
+    progress: any,
+  ) {
+    try {
+      console.log(progress);
+      return await this.progressService.updateProgress(
+        String(id),
+        progress,
+      );
+    } catch (error) {
+      return {
+        status: 1,
+        message: error,
+      };
+    }
+  }
 }

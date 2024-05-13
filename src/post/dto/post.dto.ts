@@ -10,17 +10,19 @@ export class PostDto {
   @IsString()
   @IsNotEmpty()
   readonly title: string;
-
   @IsString()
   @IsNotEmpty()
   readonly content: string;
-
+ 
+  @IsNotEmpty()
+  readonly image: any;
+  @IsNotEmpty()
+  readonly active: boolean;
   @IsString()
   @IsNotEmpty()
-  readonly image: string;
+  readonly description: string;
   @IsString()
-  @IsNotEmpty()
-  readonly desc: string;
+  readonly readers: string;
   @IsArray()
   readonly author: [string];
 }

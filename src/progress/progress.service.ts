@@ -37,13 +37,32 @@ export class ProgressService {
       console.log(error);
     }
   }
-  async findOneProgress(id: string) {
+  async findOneProgress(id: string,courses_id:string) {
     try {
+      
       let data = await this.progressModel
         .find({ user_id: id })
-        .populate(['courses_id'])
-        .lean()
-        .exec();
+      if (!data) {
+        return {
+          status: 1,
+          message: 'failed',
+        };
+      }
+      console.log(data);
+      return {
+        status: 0,
+        message: 'suceess',
+        data,
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async updateProgress(id: string, progress: any) {
+    try {
+      let data = await this.progressModel.findByIdAndUpdate(id, progress, {
+        new: true,
+      });
       if (!data) {
         return {
           status: 1,
@@ -59,34 +78,4 @@ export class ProgressService {
       console.log(error);
     }
   }
-  //   async updateLesson(id: string, lesson: any) {
-  //     try {
-  //       let data = await this.lessonModel.findByIdAndUpdate(id, lesson.lesson, {
-  //         new: true,
-  //       });
-  //       if (lesson.changeCourses) {
-  //         await this.coursesModel.updateOne(
-  //           { _id: lesson.lesson.courses_id[0] },
-  //           { $push: { lesson: id } },
-  //         );
-  //         await this.coursesModel.updateOne(
-  //           { _id: lesson.coursesOld },
-  //           { $pull: { lesson: id } },
-  //         );
-  //       }
-  //       if (!data) {
-  //         return {
-  //           status: 1,
-  //           message: 'failed',
-  //         };
-  //       }
-  //       return {
-  //         status: 0,
-  //         message: 'suceess',
-  //         data,
-  //       };
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   }
 }

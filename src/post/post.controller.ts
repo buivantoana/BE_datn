@@ -43,6 +43,19 @@ export class PostController {
       };
     }
   }
+  @Put('active/:id')
+  async updateActivePost(
+    @Param('id', new ValidationPipe({ transform: true })) id: idPostDto,
+  ) {
+    try {
+      return await this.postService.updateActivePost(String(id));
+    } catch (error) {
+      return {
+        status: 1,
+        message: error,
+      };
+    }
+  }
   @Delete(':id')
   async deletePost(
     @Param('id', new ValidationPipe({ transform: true })) id: idPostDto,

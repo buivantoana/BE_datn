@@ -27,6 +27,28 @@ export class PostService {
       console.log(error);
     }
   }
+  async updateActivePost(id: string) {
+    try {
+      let data = await this.postModel.findOneAndUpdate(
+        { _id: id },
+        { $set: { active: true } },
+        { returnOriginal: false },
+      );
+      if (!data) {
+        return {
+          status: 1,
+          message: 'failed',
+        };
+      }
+      return {
+        status: 0,
+        message: 'suceess',
+        data,
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  }
   async updatePost(id: string, post: IPost) {
     try {
       let data = await this.postModel.findByIdAndUpdate(id, post, {

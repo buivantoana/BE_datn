@@ -37,11 +37,12 @@ export class ProgressService {
       console.log(error);
     }
   }
-  async findOneProgress(id: string,courses_id:string) {
+  async findOneProgress(id: string, courses_id: string) {
     try {
-      
-      let data = await this.progressModel
-        .find({ user_id: id })
+      let data = await this.progressModel.find({
+        user_id: [id],
+        courses_id: [courses_id],
+      });
       if (!data) {
         return {
           status: 1,

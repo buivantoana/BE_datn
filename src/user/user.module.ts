@@ -12,6 +12,7 @@ import {
   RolePermission,
   RolePermissionModel,
 } from 'src/role_permission/schema/role_permission.schema';
+import { UserMiddleware } from 'src/middleware/authMidlware';
 
 @Module({
   imports: [
@@ -24,4 +25,8 @@ import {
   controllers: [UserController],
   providers: [UserService],
 })
-export class UserModule {}
+export class UserModule implements NestModule{
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(UserMiddleware).forRoutes('auth/authentication');
+  }
+}

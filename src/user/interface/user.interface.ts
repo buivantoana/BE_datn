@@ -4,4 +4,6 @@ export interface IUser {
   password?: string;
   role?: string;
   permission?: any;
+  user_name?:string;
+  image?:any
 }

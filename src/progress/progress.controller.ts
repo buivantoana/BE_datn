@@ -32,13 +32,26 @@ export class ProgressController {
       };
     }
   }
-  @Get(':id/:courses_id')
+  @Get('detail/:id/:courses_id')
   async findOneProgress(
     @Param('id', new ValidationPipe({ transform: true })) id: idProgressDto,
     @Param('courses_id', new ValidationPipe({ transform: true })) courses_id: idProgressDto,
   ) {
     try {
       return await this.progressService.findOneProgress(String(id),String(courses_id));
+    } catch (error) {
+      return {
+        status: 1,
+        message: error,
+      };
+    }
+  }
+  @Get('/user/:id')
+  async findUserProgress(
+    @Param('id', new ValidationPipe({ transform: true })) id: idProgressDto,
+  ) {
+    try {
+      return await this.progressService.findUserProgress(String(id));
     } catch (error) {
       return {
         status: 1,

@@ -36,7 +36,7 @@ export class UserService {
         permission: user.permission,
       },
       this.secretKey,
-      { expiresIn: '1d' },
+      { expiresIn: '20s' },
     );
     return token;
   }
@@ -153,6 +153,7 @@ export class UserService {
       );
       data[0].password = null;
       return {
+        status: 0,
         token,
         refeshToken,
         data,

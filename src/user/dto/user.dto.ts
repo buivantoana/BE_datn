@@ -6,7 +6,7 @@ export class SignupDto {
   @IsEmail()
   readonly email: string;
   @IsString()
-  readonly role?: string;
+  readonly user_name: string;
 }
 export class SigninDto {
   @IsString()

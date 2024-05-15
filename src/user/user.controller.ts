@@ -25,7 +25,7 @@ export class UserController {
   async signup(
     // @Res() res: Response,
     @Body(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
-    user: SignupDto,
+    user: any,
   ) {
     try {
       return await this.userService.signup(user);

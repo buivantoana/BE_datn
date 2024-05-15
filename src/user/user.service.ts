@@ -45,36 +45,88 @@ export class UserService {
     return await bcrypt.hash(password, saltRounds);
   }
 
-  async signup(user: IUser): Promise<any> {
+  async signup(user: any): Promise<any> {
     try {
       let email = await this.userModel.find({ email: user.email });
       if (email[0]) {
+        if(user.type =="email"){
+          return {
+            status: 1,
+            message: 'Email da ton tai',
+          };
+
+        }else{
+          let data = await this.userModel.find({ email: user.email,uid:user.uid });
+          let token = await this.createToken({
+            email: data[0].email,
+            role: data[0].role,
+            _id: data[0]._id,
+          });
+          let refeshToken = await sign(
+            {
+              email: data[0].email,
+              role: data[0].role,
+              _id: data[0]._id,
+            },
+            this.secretKey,
+          );
+          return {
+            status: 0,
+            token,
+            refeshToken,
+            data,
+          };
+        }
+      }
+      if(user.type =="email"){
+        let password = this.generateRandomPassword(6);
+        let mail = await this.mailService.sendMail(
+          'toanbvph30125@fpt.edu.vn',
+          'Signup PassWord',
+          password,
+        );
+        if (!mail) {
+          return {
+            status: 1,
+            message: 'gui mail that bai',
+          };
+        }
+        password = await this.hashPassword(password);
+  
+        const data = new this.userModel({ ...user, password }).save();
+  
         return {
-          status: 1,
-          message: 'Email da ton tai',
+          status: 0,
+          message: 'create user success',
+          data,
+        };
+      }else{
+        delete user.type
+        const data =  await this.userModel.create({ ...user });
+        if(Object.keys(data)[0]){
+          
+        }
+        let token = await this.createToken({
+          email: data.email,
+          role: data.role,
+          _id: data._id,
+        });
+        let refeshToken = await sign(
+          {
+            email: data.email,
+            role: data.role,
+            _id: data._id,
+          },
+          this.secretKey,
+        );
+        return {
+          status: 0,
+          token,
+          refeshToken,
+          data,
         };
       }
-      let password = this.generateRandomPassword(6);
-      let mail = await this.mailService.sendMail(
-        'toanbvph30125@fpt.edu.vn',
-        'Signup PassWord',
-        password,
-      );
-      if (!mail) {
-        return {
-          status: 1,
-          message: 'gui mail that bai',
-        };
-      }
-      password = await this.hashPassword(password);
-
-      const data = new this.userModel({ ...user, password }).save();
-
-      return {
-        status: 0,
-        message: 'create user success',
-        data,
-      };
+     
     } catch (error) {
       return {
         status: 1,

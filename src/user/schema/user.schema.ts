@@ -7,7 +7,7 @@ export class User extends Document {
   @Prop({ required: true })
   email: string;
   @Prop()
-  password: string;
+  password?: string;
   @Prop()
   image: ImageSchema;
   @Prop({ default: 'member' })

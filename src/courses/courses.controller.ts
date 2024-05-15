@@ -105,4 +105,17 @@ export class CoursesController {
       };
     }
   }
+  @Get('my_courses/:id')
+  async findMyCourses(
+    @Param('id', new ValidationPipe({ transform: true })) id: idCoursesDto,
+  ) {
+    try {
+      return await this.coursesService.findMyCourses(String(id));
+    } catch (error) {
+      return {
+        status: 1,
+        message: error,
+      };
+    }
+  }
 }

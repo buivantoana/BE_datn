@@ -6,11 +6,13 @@ import {
   Param,
   Post,
   Put,
+  Req,
+  Res,
   ValidationPipe,
 } from '@nestjs/common';
 import { PostService } from './post.service';
 import { PostDto, idPostDto } from './dto/post.dto';
-
+import { Request, Response } from 'express';
 @Controller('post')
 export class PostController {
   constructor(private postService: PostService) {}
@@ -49,6 +51,32 @@ export class PostController {
   ) {
     try {
       return await this.postService.updateActivePost(String(id));
+    } catch (error) {
+      return {
+        status: 1,
+        message: error,
+      };
+    }
+  }
+  @Get('active')
+  async getActivePost(
+    @Req() req: Request
+  ) {
+    try {
+      return await this.postService.findPaginationPostActive(req);
+    } catch (error) {
+      return {
+        status: 1,
+        message: error,
+      };
+    }
+  }
+  @Get('user/:id')
+  async getUserPost(
+    @Param('id', new ValidationPipe({ transform: true })) id: idPostDto,
+  ) {
+    try {
+      return await this.postService.findAllUserPost(String(id));
     } catch (error) {
       return {
         status: 1,

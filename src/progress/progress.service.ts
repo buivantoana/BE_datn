@@ -26,7 +26,7 @@ export class ProgressService {
       }
       await this.coursesModel.updateOne(
         { _id: progress.courses_id },
-        { $push: { students: data._id } },
+        { $push: { students: data.user_id[0] } },
       );
       return {
         status: 0,
@@ -78,7 +78,6 @@ export class ProgressService {
           message: 'failed',
         };
       }
-      console.log(data);
       return {
         status: 0,
         message: 'suceess',

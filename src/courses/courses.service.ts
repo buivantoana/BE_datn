@@ -188,4 +188,35 @@ export class CoursesService {
       console.log(error);
     }
   }
+  async findMyCourses(id: string) {
+    try {
+      let data = await this.coursesModel
+        .find({ students: id })
+        .populate([
+          'category_id',
+          {
+            path: 'lesson',
+            populate: {
+              path: 'sub_lesson',
+              model: 'SubLesson',
+            },
+          },
+        ])
+        .lean()
+        .exec();
+      if (!data) {
+        return {
+          status: 1,
+          message: 'failed',
+        };
+      }
+      return {
+        status: 0,
+        message: 'suceess',
+        data,
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }

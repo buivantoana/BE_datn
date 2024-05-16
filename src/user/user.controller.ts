@@ -18,7 +18,7 @@ import { JwtAuthGuard } from 'src/guards/auth.guards';
 import { Roles } from 'src/guards/role.decorator';
 
 @Controller('auth')
-@UseGuards(JwtAuthGuard)
+// @UseGuards(JwtAuthGuard)
 export class UserController {
   constructor(private userService: UserService) {}
   @Post('signup')
@@ -93,7 +93,7 @@ export class UserController {
   }
 
   @Get('')
-  @Roles('create_user')
+  // @Roles('create_user')
   async fillAllUser() {
     try {
       return await this.userService.fillAllUser();
@@ -105,7 +105,7 @@ export class UserController {
     }
   }
   @Delete(':id')
-  @Roles('delete_user')
+  // @Roles('delete_user')
   async deleteUser(
     @Param('id', new ValidationPipe({ transform: true }))
     id: idUserDto,
@@ -124,7 +124,7 @@ export class UserController {
     @Param('id', new ValidationPipe({ transform: true }))
     id: idUserDto,
     @Body(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
-    user: SignupDto,
+    user: any,
   ) {
     try {
       return await this.userService.updateUser(String(id), user);

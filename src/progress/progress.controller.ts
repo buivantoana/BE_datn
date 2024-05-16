@@ -14,6 +14,9 @@ import {
 import { Response, Request } from 'express';
 import { idProgressDto, ProgressDto } from './dto/progress.dto';
 import { ProgressService } from './progress.service';
+import { checkExerciseHtml } from 'src/exersice/checkExersiceHtml';
+import { checkExercise } from 'src/exersice/checkExersice';
+
 
 @Controller('progress')
 export class ProgressController {
@@ -49,9 +52,30 @@ export class ProgressController {
   @Get('/user/:id')
   async findUserProgress(
     @Param('id', new ValidationPipe({ transform: true })) id: idProgressDto,
+    
   ) {
     try {
+
       return await this.progressService.findUserProgress(String(id));
+    } catch (error) {
+      return {
+        status: 1,
+        message: error,
+      };
+    }
+  }
+  @Post('/exersice')
+  async checkExersiceProgress(
+    @Req() req: Request,
+    @Res() res: Response,
+  ) {
+    console.log(req.body);
+    try {
+      if(req.body.type == "javascript"){
+        return await checkExercise(req.body.id,req.body.exercise,res)
+      }else{
+        return await checkExerciseHtml(req.body.id,req.body.exercise,res)
+      }
     } catch (error) {
       return {
         status: 1,

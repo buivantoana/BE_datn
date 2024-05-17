@@ -17,6 +17,7 @@ import { ProgressModule } from './progress/progress.module';
 
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { OrdersModule } from './order/order.module';
+import { CommentsModule } from './comments/comments.module';
 
 @Module({
   imports: [
@@ -34,7 +35,8 @@ import { OrdersModule } from './order/order.module';
     CategoriesModule,
     ProgressModule,
     CloudinaryModule,
-    OrdersModule
+    OrdersModule,
+    CommentsModule
   ],
 })
 export class AppModule {}

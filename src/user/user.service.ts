@@ -93,7 +93,7 @@ export class UserService {
         }
         password = await this.hashPassword(password);
   
-        const data = new this.userModel({ ...user, password }).save();
+        const data = new this.userModel({ ...user, password,image:{url:"",public_id:""} }).save();
   
         return {
           status: 0,
@@ -102,7 +102,7 @@ export class UserService {
         };
       }else{
         delete user.type
-        const data =  await this.userModel.create({ ...user });
+        const data =  await this.userModel.create({ ...user,image:{url:"",public_id:""} });
         if(Object.keys(data)[0]){
           
         }
@@ -123,7 +123,7 @@ export class UserService {
           status: 0,
           token,
           refeshToken,
-          data,
+          data:[data],
         };
       }
      
@@ -221,6 +221,7 @@ export class UserService {
     try {
       const data: any = await verify(token, this.secretKey);
       const datanew = await this.userModel.findById(data._id);
+      console.log(datanew);
       if (data) {
         const newdata = {
           email: datanew.email,
@@ -233,7 +234,7 @@ export class UserService {
           status: 0,
           message: 'token refesh',
           accessToken: accessToken,
-          datanew,
+          datanew:datanew,
         };
       }
     } catch (error) {}
@@ -280,6 +281,35 @@ export class UserService {
       let data = await this.userModel.findByIdAndUpdate(id, user, {
         new: true,
       });
+      if (!data) {
+        return {
+          status: 1,
+          message: 'failed',
+        };
+      }
+      return {
+        status: 0,
+        message: 'suceess',
+        data,
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async updateProfileUser(id: string, user: any) {
+    try {
+      let data:any
+      if(user.type=="name"){
+        data = await this.userModel.findOneAndUpdate({ _id: id },
+         { $set: { user_name: user.body.user_name } },
+         { returnOriginal: false });
+
+      }else{
+        data = await this.userModel.findOneAndUpdate({ _id: id },
+          { $set: { image: user.body.image } },
+          { returnOriginal: false });
+      }
+
       if (!data) {
         return {
           status: 1,

@@ -135,4 +135,20 @@ export class UserController {
       };
     }
   }
+  @Put('profile/:id')
+  async updateProfileUser(
+    @Param('id', new ValidationPipe({ transform: true }))
+    id: idUserDto,
+    @Body(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
+    user: any,
+  ) {
+    try {
+      return await this.userService.updateProfileUser(String(id), user);
+    } catch (error) {
+      return {
+        status: 1,
+        message: error,
+      };
+    }
+  }
 }

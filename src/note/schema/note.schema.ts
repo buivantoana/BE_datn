@@ -12,6 +12,8 @@ import { User } from 'src/user/schema/user.schema';
 export class Note extends Document {
   @Prop({ required: true })
   content: string;
+   @Prop({ required: true })
+  time: string;
   @Prop({ type: [{ type: MongooseSchema.Types.ObjectId, ref: 'User' }] })
   user_id: User[];
   @Prop({ type: [{ type: MongooseSchema.Types.ObjectId, ref: 'Courses' }] })

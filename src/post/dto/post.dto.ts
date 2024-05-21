@@ -18,6 +18,8 @@ export class PostDto {
   readonly image: any;
   @IsNotEmpty()
   readonly active: boolean;
+  @IsNotEmpty()
+  readonly notify: boolean;
   @IsString()
   @IsNotEmpty()
   readonly description: string;

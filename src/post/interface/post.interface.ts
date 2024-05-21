@@ -6,4 +6,5 @@ export interface IPost {
   content: string;
   readers: string;
   active: boolean;
+  notify: boolean;
 }

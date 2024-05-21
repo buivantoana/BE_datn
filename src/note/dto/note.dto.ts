@@ -4,6 +4,9 @@ export class NoteDto {
   @IsString()
   @IsNotEmpty()
   readonly content: string;
+  @IsString()
+  @IsNotEmpty()
+  readonly time: string;
   @IsArray()
   readonly sub_lesson_id: [];
   @IsArray()

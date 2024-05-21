@@ -34,6 +34,13 @@ export class Progress extends Document {
   user_id: User;
   @Prop({ type: [{ type: MongooseSchema.Types.ObjectId, ref: 'Courses' }] })
   courses_id: Courses;
+  @Prop()
+  user_name?: string;
+  @Prop()
+  date_certificate?: string;
+  @Prop()
+  status_certificate?: boolean;
+
 }
 
 export const ProgressModel = SchemaFactory.createForClass(Progress);

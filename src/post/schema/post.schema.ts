@@ -18,6 +18,8 @@ export class Post extends Document {
   readers: string;
   @Prop({ required: true })
   active: boolean;
+  @Prop({ required: true })
+  notify: boolean;
   @Prop({ type: [{ type: MongooseSchema.Types.ObjectId, ref: 'User' }] })
   author: User[];
 }

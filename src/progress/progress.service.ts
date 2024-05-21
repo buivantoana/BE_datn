@@ -39,17 +39,16 @@ export class ProgressService {
   }
   async findOneProgress(id: string, courses_id: string) {
     try {
-      let arr = []
+      let arr = [];
       let data = await this.progressModel.find({
         user_id: [id],
       });
-     
-       data.map((item:any)=>{
-        if(item.courses_id[0] ==courses_id){
-          return arr.push(item)
+
+      data.map((item: any) => {
+        if (item.courses_id[0] == courses_id) {
+          return arr.push(item);
         }
-        
-      })
+      });
       console.log(arr);
       if (!data) {
         return {
@@ -57,11 +56,11 @@ export class ProgressService {
           message: 'failed',
         };
       }
-      
+
       return {
         status: 0,
         message: 'suceess',
-        data:arr,
+        data: arr,
       };
     } catch (error) {
       console.log(error);
@@ -92,6 +91,34 @@ export class ProgressService {
       let data = await this.progressModel.findByIdAndUpdate(id, progress, {
         new: true,
       });
+      if (!data) {
+        return {
+          status: 1,
+          message: 'failed',
+        };
+      }
+      return {
+        status: 0,
+        message: 'suceess',
+        data,
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async updateCertificate(id: string, progress: any) {
+    try {
+      let data = await this.progressModel.findByIdAndUpdate(
+        id,
+        {
+          $set: {
+            user_name: progress.user_name,
+            date_certificate: progress.date_certificate,
+            status_certificate: progress.status_certificate,
+          },
+        }, 
+        { new: true, useFindAndModify: false },
+      );
       if (!data) {
         return {
           status: 1,

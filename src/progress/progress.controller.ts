@@ -102,4 +102,22 @@ export class ProgressController {
       };
     }
   }
+  @Put('certificate/:id')
+  async updateCertificate(
+    @Param('id', new ValidationPipe({ transform: true })) id: idProgressDto,
+    @Body(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
+    progress: any,
+  ) {
+    try {
+      return await this.progressService.updateProgress(
+        String(id),
+        progress,
+      );
+    } catch (error) {
+      return {
+        status: 1,
+        message: error,
+      };
+    }
+  }
 }

@@ -22,7 +22,7 @@ export class LessonService {
       if (!data) {
         return {
           status: 1,
-          message: 'failed',
+          message: 'Không lấy được dữ liệu',
         };
       }
       await this.coursesModel.updateOne(

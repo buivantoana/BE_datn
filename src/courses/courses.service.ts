@@ -22,7 +22,7 @@ export class CoursesService {
       if (!data) {
         return {
           status: 1,
-          message: 'failed',
+          message: 'Không lấy được dữ liệu',
         };
       }
       return {
@@ -42,7 +42,7 @@ export class CoursesService {
       if (!data) {
         return {
           status: 1,
-          message: 'failed',
+          message: 'Không lấy được dữ liệu',
         };
       }
       return {
@@ -73,7 +73,7 @@ export class CoursesService {
       if (!datadelete) {
         return {
           status: 1,
-          message: 'failed',
+          message: 'Không lấy được dữ liệu',
         };
       }
       datadelete.lesson.map(async (item: any) => {
@@ -89,7 +89,7 @@ export class CoursesService {
       if (!data) {
         return {
           status: 1,
-          message: 'failed',
+          message: 'Không lấy được dữ liệu',
         };
       }
 
@@ -122,7 +122,7 @@ export class CoursesService {
       if (!data) {
         return {
           status: 1,
-          message: 'failed',
+          message: 'Không lấy được dữ liệu',
         };
       }
       return {
@@ -145,7 +145,7 @@ export class CoursesService {
       if (!data) {
         return {
           status: 1,
-          message: 'failed',
+          message: 'Không lấy được dữ liệu',
         };
       }
       return {
@@ -176,7 +176,7 @@ export class CoursesService {
       if (!data) {
         return {
           status: 1,
-          message: 'failed',
+          message: 'Không lấy được dữ liệu',
         };
       }
       return {
@@ -207,7 +207,7 @@ export class CoursesService {
       if (!data) {
         return {
           status: 1,
-          message: 'failed',
+          message: 'Không lấy được dữ liệu',
         };
       }
       return {

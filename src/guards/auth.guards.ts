@@ -18,12 +18,10 @@ export class JwtAuthGuard implements CanActivate {
     if (!roles) {
       return true;
     }
-
     const request = context.switchToHttp().getRequest();
     const response = context.switchToHttp().getResponse();
-
     const token = request.headers.authorization?.split(' ')[1];
-
+    console.log(token);
     if (!token) {
       return false;
     }
@@ -36,6 +34,7 @@ export class JwtAuthGuard implements CanActivate {
         .lean()
         .exec();
 
+       
       if (
         data
           .filter((item) => item.role_id[0].name === decodedToken.role)[0]

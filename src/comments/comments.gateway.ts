@@ -20,7 +20,8 @@ import { Comments } from './schema/comments.schema';
     constructor(
       @InjectModel(Comments.name)
       private readonly commentModel: Model<Comments>,
-    //   @InjectModel(User.name) private readonly userModel: Model<User>,
+
+     @InjectModel(User.name) private readonly userModel: Model<User>,
     ) {}
     @WebSocketServer() server: Server;
   
@@ -184,13 +185,13 @@ import { Comments } from './schema/comments.schema';
           }
     }
   
-    // @SubscribeMessage('deleteComment')
-    // async handleEditPermission(client: Socket, payload: any) {
-    //   try {
-    //     const data = await this.userModel.findById(payload.id);
-    //     this.server.emit("confirmEditPermission",{email:data.email})
-    //   } catch (error) {
-    //     console.error('Error updating comment in the database:', error);
-    //   }
-    // }
+    @SubscribeMessage('editPermission')
+    async handleEditPermission(client: Socket, payload: any) {
+      try {
+        const data = await this.userModel.findById(payload.id);
+        this.server.emit("confirmEditPermission",{email:data.email})
+      } catch (error) {
+        console.error('Error updating comment in the database:', error);
+      }
+    }
   }

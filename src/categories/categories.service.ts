@@ -16,7 +16,7 @@ export class CategoriesService {
       if (!data) {
         return {
           status: 1,
-          message: 'failed',
+          message: 'Không lấy được dữ liệu',
         };
       }
       return {
@@ -36,7 +36,7 @@ export class CategoriesService {
       if (!data) {
         return {
           status: 1,
-          message: 'failed',
+          message: 'Không lấy được dữ liệu',
         };
       }
       return {
@@ -54,7 +54,7 @@ export class CategoriesService {
       if (!data) {
         return {
           status: 1,
-          message: 'failed',
+          message: 'Không lấy được dữ liệu',
         };
       }
       return {
@@ -73,7 +73,7 @@ export class CategoriesService {
       if (!data) {
         return {
           status: 1,
-          message: 'failed',
+          message: 'Không lấy được dữ liệu',
         };
       }
       return {
@@ -91,7 +91,7 @@ export class CategoriesService {
       if (!data) {
         return {
           status: 1,
-          message: 'failed',
+          message: 'Không lấy được dữ liệu',
         };
       }
       return {

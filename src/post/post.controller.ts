@@ -8,12 +8,16 @@ import {
   Put,
   Req,
   Res,
+  UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
 import { PostService } from './post.service';
 import { PostDto, idPostDto } from './dto/post.dto';
 import { Request, Response } from 'express';
+import { JwtAuthGuard } from 'src/guards/auth.guards';
+import { Roles } from 'src/guards/role.decorator';
 @Controller('post')
+@UseGuards(JwtAuthGuard)
 export class PostController {
   constructor(private postService: PostService) {}
   @Post('')
@@ -46,6 +50,7 @@ export class PostController {
     }
   }
   @Put('active/:id')
+  @Roles('edit_article')
   async updateActivePost(
     @Param('id', new ValidationPipe({ transform: true })) id: idPostDto,
   ) {

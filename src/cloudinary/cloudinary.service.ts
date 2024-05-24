@@ -20,4 +20,22 @@ export class CloudinaryService {
   async deleteImage(publicId: string): Promise<void> {
     return await cloudinary.uploader.destroy(publicId);
   }
+  async uploadVideo(file: Express.Multer.File): Promise<CloudinaryResponse> {
+    return new Promise<CloudinaryResponse>((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        {
+          resource_type: 'video',
+        },
+        (error, result) => {
+          if (error) return reject(error);
+          resolve(result);
+        },
+      );
+
+      streamifier.createReadStream(file.buffer).pipe(uploadStream);
+    });
+  }
+  async deleteVideo(publicId: string): Promise<void> {
+    await cloudinary.uploader.destroy(publicId, { resource_type: 'video' });
+  }
 }

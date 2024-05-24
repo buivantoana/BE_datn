@@ -15,7 +15,7 @@ export const ExerciseCreare_H1_P_Img = (exercise, res) => {
         if (hasImg) message += " <img>";
         res.status(200).json(message)
     } catch (error) {
-        console.log(error);
+        res.status(200).json({status:1,message:error.message})
     }
 };
 
@@ -74,23 +74,23 @@ export const ExerciseGetAtribute = (exercise, res) => {
         const a = document.querySelector("a");
         const imgTitle = img ? img.getAttribute("title") : null;
         if (!imgTitle || imgTitle.trim() === "") {
-            res.status(200).json({ message: "Thiếu thuộc tính title cho thẻ img." });
+            res.status(200).json({status:1, message: "Thiếu thuộc tính title cho thẻ img." });
             return;
         }
         const href = a ? a.getAttribute("href") : null;
         if (!href || href.trim() === "") {
-            res.status(200).json({ message: "Thiếu thuộc tính href cho thẻ a." });
+            res.status(200).json({status:1, message: "Thiếu thuộc tính href cho thẻ a." });
             return;
         }
         const urlRegex = /^(ftp|http|https):\/\/[^ "]+$/;
         if (!urlRegex.test(href)) {
-            res.status(200).json({ message: "Giá trị của thuộc tính href không phải là một URL hợp lệ." });
+            res.status(200).json({status:1, message: "Giá trị của thuộc tính href không phải là một URL hợp lệ." });
             return;
         }
 
-        res.status(200).json({ message: "Đã tồn tại thuộc tính title cho thẻ img và thuộc tính href cho thẻ a là một URL hợp lệ trong đoạn mã HTML." });
+        res.status(200).json({status:0, message: "Đã tồn tại thuộc tính title cho thẻ img và thuộc tính href cho thẻ a là một URL hợp lệ trong đoạn mã HTML." });
     } catch (error) {
-        console.log(error);
+        res.status(200).json({status:1,message:error.message})
     }
 };
 // Thực hành sử dụng CSS internal

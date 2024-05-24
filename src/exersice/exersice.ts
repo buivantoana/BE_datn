@@ -1,5 +1,5 @@
 // Thực hành toán tử số học
-export const ExerciseAge = (exercise,res) => {
+export const ExerciseAge = (exercise, res) => {
   let sentence = JSON.stringify(exercise);
   try {
     eval(`
@@ -40,15 +40,14 @@ export const ExerciseAge = (exercise,res) => {
       
       `);
   } catch (error) {
-    
     return res.status(200).json({
-      status:1,
-      message:error.message
-     }) 
+      status: 1,
+      message: error.message,
+    });
   }
 };
 // Bắt đầu với một thử thách nhỏ
-export const ExerciseAlert = (exercise,res) => {
+export const ExerciseAlert = (exercise, res) => {
   let sentence = JSON.stringify(exercise);
   try {
     eval(`
@@ -56,12 +55,22 @@ export const ExerciseAlert = (exercise,res) => {
         const check = ${sentence}.includes('alert');
                if(check){
                  try {
-                   new Function(${sentence})();
+                   res.status(200).json({
+                    status:0,
+                    message:"Bạn đã viết đúng cú pháp câu lệnh alert"
+                   }) 
                  } catch (err) {
-                   alert(err.message);
+                  res.status(200).json({
+                    status:1,
+                    message:err.message
+                   }) 
                  }
                }else{
-                 alert('phai la cau lenh alert')
+                res.status(200).json({
+                  status:1,
+                  message:"Phải là câu lệnh alert"
+                 }) 
+                
                }
       }catch(error){
         throw error;
@@ -69,43 +78,47 @@ export const ExerciseAlert = (exercise,res) => {
       
       `);
   } catch (error) {
-    alert(error);
+    res.status(200).json({
+      status: 1,
+      message: error.message,
+    });
   }
 };
 // Thực hành sử dụng biến
-export const ExerciseWeight = (exercise,res) => {
+export const ExerciseWeight = (exercise, res) => {
   let sentence = JSON.stringify(exercise);
   try {
     eval(`
     try {
-        const keywords = ['let', 'var', 'const'];
-        if(!keywords.includes(${sentence}.split(" ")[0])){
-          alert('Không tìm thấy từ khóa khai báo biến')
-        }else{
-          let modifiedText = ${sentence}.split(" ").slice(1).join(" ");
-          if(modifiedText[length-1]!==';'){
-            modifiedText+=';'
-          }
-          const func2 = new Function('context', modifiedText + ' return weight;');
-          const context = {};
-          const result = func2(context);
-          if (typeof result === 'number') {
-            console.log("Giá trị của biến weight:", result);
+          ${exercise}
+          if (typeof weight === 'number') {
+            res.status(200).json({
+              status:0,
+              message:'Chúc mừng bạn đã hoàn thành thử thách'
+             }) 
           } else {
-            alert("Biến weight không có giá trị hoặc không phải là số.");
+            res.status(200).json({
+              status:1,
+              message:"Biến weight không có giá trị hoặc không phải là số."
+             }) 
+           
           }
-    
-        }
     } catch (error) {
-        alert("Lỗi xảy ra: " + error.message);
+      res.status(200).json({
+        status:1,
+        message:error.message
+       }) 
     }
         `);
   } catch (error) {
-    alert(error);
+    res.status(200).json({
+      status: 1,
+      message: error.message,
+    });
   }
 };
 // Thực hành sử dụng console.log
-export const ExerciseConsoleLog = (exercise,res) => {
+export const ExerciseConsoleLog = (exercise, res) => {
   let sentence = JSON.stringify(exercise);
   try {
     eval(`
@@ -131,10 +144,10 @@ export const ExerciseConsoleLog = (exercise,res) => {
 };
 
 // Thực hành với toán tử gán
-export const checkExerciseOperator = (exercise,res) => {
-    let sentence = JSON.stringify(exercise);
-    try {
-      eval(`
+export const checkExerciseOperator = (exercise, res) => {
+  let sentence = JSON.stringify(exercise);
+  try {
+    eval(`
         try {
           ${exercise}
           if (typeof a !== 'undefined' && typeof b !== 'undefined' && typeof c !== 'undefined' && typeof d !== 'undefined') {
@@ -162,14 +175,14 @@ export const checkExerciseOperator = (exercise,res) => {
           throw error;
         }
       `);
-    } catch (error) {
-      alert(error);
-    }
-  };
+  } catch (error) {
+    alert(error);
+  }
+};
 // Thực hành nối chuỗi
-  export const checkExerciseFullName = (exercise,res) => {
-    try {
-      eval(`
+export const checkExerciseFullName = (exercise, res) => {
+  try {
+    eval(`
         try {
           ${exercise}
           if (typeof fullName !== 'undefined') {
@@ -195,14 +208,14 @@ export const checkExerciseOperator = (exercise,res) => {
           throw error;
         }
       `);
-    } catch (error) {
-      alert(error);
-    }
-  };
+  } catch (error) {
+    alert(error);
+  }
+};
 // Thực hành dùng boolean
-  export const checkExerciseCanBuyAlcohol = (exercise,res) => {
-    try {
-      eval(`
+export const checkExerciseCanBuyAlcohol = (exercise, res) => {
+  try {
+    eval(`
         try {
           ${exercise}
           if (typeof canBuyAlcohol !== 'undefined') {
@@ -231,14 +244,14 @@ export const checkExerciseOperator = (exercise,res) => {
           throw error;
         }
       `);
-    } catch (error) {
-      alert(error);
-    }
-  };
+  } catch (error) {
+    alert(error);
+  }
+};
 // Thực hành tạo hàm sum #1
-  export const checkExerciseSumFunction = (exercise,res) => {
-    try {
-      eval(`
+export const checkExerciseSumFunction = (exercise, res) => {
+  try {
+    eval(`
         try {
           ${exercise}
           if (typeof sum === 'function') {
@@ -250,14 +263,14 @@ export const checkExerciseOperator = (exercise,res) => {
           throw error;
         }
       `);
-    } catch (error) {
-      alert(error);
-    }
-  };
+  } catch (error) {
+    alert(error);
+  }
+};
 // Thực hành tạo hàm sum #2
-  export const checkExerciseSumParameters = (exercise,res) => {
-    try {
-      eval(`
+export const checkExerciseSumParameters = (exercise, res) => {
+  try {
+    eval(`
       try {
         ${exercise}
         if (typeof sum === 'function') {
@@ -276,14 +289,14 @@ export const checkExerciseOperator = (exercise,res) => {
         throw error;
       }
       `);
-    } catch (error) {
-      alert(error);
-    }
-  };
+  } catch (error) {
+    alert(error);
+  }
+};
 // Thực hành tạo hàm sum #3
-  export const checkExerciseSumTotal = (exercise,res) => {
-    try {
-      eval(`
+export const checkExerciseSumTotal = (exercise, res) => {
+  try {
+    eval(`
         try {
           ${exercise}
           if (typeof sum === 'function') {
@@ -310,14 +323,14 @@ export const checkExerciseOperator = (exercise,res) => {
           throw error;
         }
       `);
-    } catch (error) {
-      alert(error);
-    }
-  };
+  } catch (error) {
+    alert(error);
+  }
+};
 //   Thực hành dùng hàm sum
-  export const checkExerciseResult = (exercise,res) => {
-    try {
-        eval(`
+export const checkExerciseResult = (exercise, res) => {
+  try {
+    eval(`
             try {
                 ${exercise}
                 if (typeof result !== 'undefined') {
@@ -337,14 +350,14 @@ export const checkExerciseOperator = (exercise,res) => {
                 }
             }
         `);
-    } catch (error) {
-        alert(error);
-    }
-  };
+  } catch (error) {
+    alert(error);
+  }
+};
 //  Thực hành với chuỗi #1
-export const checkExerciseEmailAssignment = (exercise,res) => {
-    try {
-        eval(`
+export const checkExerciseEmailAssignment = (exercise, res) => {
+  try {
+    eval(`
             try {
                 ${exercise}
                 if (typeof email !== 'undefined') {
@@ -360,14 +373,14 @@ export const checkExerciseEmailAssignment = (exercise,res) => {
                 throw error;
             }
         `);
-    } catch (error) {
-        alert(error);
-    }
+  } catch (error) {
+    alert(error);
+  }
 };
 // Thực hành với chuỗi #2
-export const checkExerciseSplit = (exercise,res) => {
-    try {
-        eval(`
+export const checkExerciseSplit = (exercise, res) => {
+  try {
+    eval(`
             try {
                 ${exercise}
                 const expected = ['HTML & CSS','JavaScript','ReactJS'];
@@ -382,15 +395,15 @@ export const checkExerciseSplit = (exercise,res) => {
                 throw error;
             }
         `);
-    } catch (error) {
-        alert(error);
-    }
+  } catch (error) {
+    alert(error);
+  }
 };
 // Hàm lấy độ dài chuỗi
 
-export const checkExerciselength = (exercise,res) => {
-    try {
-        eval(`
+export const checkExerciselength = (exercise, res) => {
+  try {
+    eval(`
             try {
                 ${exercise}
                 const expectedLength = total;
@@ -404,14 +417,14 @@ export const checkExerciselength = (exercise,res) => {
                 throw error;
             }
         `);
-    } catch (error) {
-        console.error(error);
-    }
+  } catch (error) {
+    console.error(error);
+  }
 };
 // Chuyển đổi sang chữ in hoa
-export const checkExerciseUpperCase = (exercise,res) => {
-    try {
-        eval(`
+export const checkExerciseUpperCase = (exercise, res) => {
+  try {
+    eval(`
             try {
                 ${exercise}
                 if (typeof getUpperCaseName === 'function') {
@@ -436,14 +449,14 @@ export const checkExerciseUpperCase = (exercise,res) => {
                 throw error;
             }
         `);
-    } catch (error) {
-        alert(error);
-    }
+  } catch (error) {
+    alert(error);
+  }
 };
 // Tạo một biến mang giá trị số
-export const checkExerciseInterge = (exercise,res) => {
-    try {
-        eval(`
+export const checkExerciseInterge = (exercise, res) => {
+  try {
+    eval(`
             try {
                 ${exercise}
 
@@ -460,14 +473,14 @@ export const checkExerciseInterge = (exercise,res) => {
                 throw error;
             }
         `);
-    } catch (error) {
-        alert(error);
-    }
+  } catch (error) {
+    alert(error);
+  }
 };
 // Viết hàm kiểm tra kiểu number #1
-export const checkExerciseIsNumber = (exercise,res) => {
-    try {
-        eval(`
+export const checkExerciseIsNumber = (exercise, res) => {
+  try {
+    eval(`
             try {
                 ${exercise}
                 if (typeof isNumber !== 'undefined') {
@@ -486,15 +499,15 @@ export const checkExerciseIsNumber = (exercise,res) => {
                 throw error;
             }
         `);
-    } catch (error) {
-        alert(error);
-    }
+  } catch (error) {
+    alert(error);
+  }
 };
 
 // Thực hành tạo array #1
-export const checkExerciseGames = (exercise,res) => {
-    try {
-        eval(`
+export const checkExerciseGames = (exercise, res) => {
+  try {
+    eval(`
             try {
                 ${exercise}
                 if (typeof games !== 'undefined') {
@@ -516,14 +529,14 @@ export const checkExerciseGames = (exercise,res) => {
                 throw error;
             }
         `);
-    } catch (error) {
-        alert(error);
-    }
+  } catch (error) {
+    alert(error);
+  }
 };
 // Thực hành tạo array #2
-export const checkExerciseNumbers = (exercise,res) => {
-    try {
-        eval(`
+export const checkExerciseNumbers = (exercise, res) => {
+  try {
+    eval(`
             try {
                 ${exercise}
                 if (typeof numbers !== 'undefined') {
@@ -548,14 +561,14 @@ export const checkExerciseNumbers = (exercise,res) => {
                 throw error;
             }
         `);
-    } catch (error) {
-        alert(error);
-    }
+  } catch (error) {
+    alert(error);
+  }
 };
 // Làm việc với mảng #3
-export const checkExerciseFirstElement = (exercise,res) => {
-    try {
-        eval(`
+export const checkExerciseFirstElement = (exercise, res) => {
+  try {
+    eval(`
             try {
                 ${exercise}
                 if (typeof getFirstElement !== 'undefined') {
@@ -578,14 +591,14 @@ export const checkExerciseFirstElement = (exercise,res) => {
                 throw error;
             }
         `);
-    } catch (error) {
-        console.error(error);
-    }
+  } catch (error) {
+    console.error(error);
+  }
 };
 // Tạo object student
-export const checkStudentObject = (exercise,res) => {
-    try {
-        eval(`
+export const checkStudentObject = (exercise, res) => {
+  try {
+    eval(`
             try {
                 ${exercise}
                 if (typeof student === 'object') {
@@ -608,14 +621,14 @@ export const checkStudentObject = (exercise,res) => {
                 throw error;
             }
         `);
-    } catch (error) {
-        alert(error);
-    }
+  } catch (error) {
+    alert(error);
+  }
 };
 // Tạo object constructor Animal
-export const checkAnimalConstructor = (exercise ,res) => {
-    try {
-        eval(`
+export const checkAnimalConstructor = (exercise, res) => {
+  try {
+    eval(`
             try {
                 ${exercise}
                 const parrot = new Animal('parrot', 2, 50);
@@ -629,14 +642,14 @@ export const checkAnimalConstructor = (exercise ,res) => {
                 throw error;
             }
         `);
-    } catch (error) {
-        alert(error);
-    }
+  } catch (error) {
+    alert(error);
+  }
 };
 // Thêm phương thức getFullName
-export const checkStudentConstructor = (exercise,res) => {
-    try {
-        eval(`
+export const checkStudentConstructor = (exercise, res) => {
+  try {
+    eval(`
             try {
                 ${exercise}
                 const student = new Student('John', 'Doe');
@@ -650,15 +663,7 @@ export const checkStudentConstructor = (exercise,res) => {
                 throw error;
             }
         `);
-    } catch (error) {
-        alert(error);
-    }
+  } catch (error) {
+    alert(error);
+  }
 };
-
-
-
-
-
-
-  
-  

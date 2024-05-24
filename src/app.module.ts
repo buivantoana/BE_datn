@@ -20,6 +20,7 @@ import { OrdersModule } from './order/order.module';
 import { CommentsModule } from './comments/comments.module';
 import { noteModule } from './note/note.module';
 
+
 @Module({
   imports: [
     MongodbConnect,
@@ -38,7 +39,8 @@ import { noteModule } from './note/note.module';
     CloudinaryModule,
     OrdersModule,
     CommentsModule,
-    noteModule
+    noteModule,
+   
   ],
 })
 export class AppModule {}

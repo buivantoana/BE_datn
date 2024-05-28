@@ -104,6 +104,21 @@ export class UserController {
       };
     }
   }
+  @Get('search/:email')
+  // @Roles('create_user')
+  async fillSearchUser(
+    @Param('email', new ValidationPipe({ transform: true }))
+    email: any,
+  ) {
+    try {
+      return await this.userService.fillSearchUser(email);
+    } catch (error) {
+      return {
+        status: 1,
+        message: error,
+      };
+    }
+  }
   @Delete(':id')
   // @Roles('delete_user')
   async deleteUser(

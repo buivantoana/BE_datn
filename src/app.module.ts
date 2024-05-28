@@ -19,6 +19,8 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { OrdersModule } from './order/order.module';
 import { CommentsModule } from './comments/comments.module';
 import { noteModule } from './note/note.module';
+import { WalletModule } from './wallet/wallet.module';
+import { TransactionsModule } from './transactions/transactions.module';
 
 
 @Module({
@@ -40,7 +42,8 @@ import { noteModule } from './note/note.module';
     OrdersModule,
     CommentsModule,
     noteModule,
-   
+    WalletModule,
+    TransactionsModule
   ],
 })
 export class AppModule {}

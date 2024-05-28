@@ -10,7 +10,6 @@ export class VnPayService {
   constructor() {}
   createVnpay(req, res) {
     process.env.TZ = 'Asia/Ho_Chi_Minh';
-
     let date = new Date();
     let createDate = moment(date).format('YYYYMMDDHHmmss');
 
@@ -19,11 +18,11 @@ export class VnPayService {
       req.connection.remoteAddress ||
       req.socket.remoteAddress ||
       req.connection.socket.remoteAddress;
-
+    let type = req.body.type
     let tmnCode = 'ICP1188N';
     let secretKey = 'STCAXXDSGQFBOPWRZVYZLSFTVKBPOSON';
     let vnpUrl = 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html';
-    let returnUrl = `http://localhost:3000/courses/${req.body.courses_id}?order_id=${req.body.order_id}`;
+    let returnUrl = type =="wallet"?`http://localhost:3000/my_wallet?order_id=${req.body.order_id}` :`http://localhost:3000/courses/${req.body.courses_id}?order_id=${req.body.order_id}`;
     let orderId = req.body.order_id;
     let amount = req.body.amount;
     let bankCode = null;

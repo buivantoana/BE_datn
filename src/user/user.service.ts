@@ -7,12 +7,14 @@ import * as bcrypt from 'bcryptjs';
 import { sign, verify } from 'jsonwebtoken';
 import { EmailService } from 'src/mail/mail.service';
 import { RolePermission } from 'src/role_permission/schema/role_permission.schema';
+import { Wallet } from 'src/wallet/schema/wallet.schema';
 
 @Injectable()
 export class UserService {
   private readonly secretKey = 'token';
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<User>,
+    @InjectModel(Wallet.name) private readonly walletModel: Model<Wallet>,
     private readonly mailService: EmailService,
   ) {}
 
@@ -93,8 +95,11 @@ export class UserService {
         }
         password = await this.hashPassword(password);
   
-        const data = new this.userModel({ ...user, password,image:{url:"",public_id:""} }).save();
-  
+        const data:any =  await this.userModel.create({ ...user, password,image:{url:"",public_id:""} });
+        if(Object.keys(data)[0]){
+          
+        }
+        await this.walletModel.create({user_id: data._id,balance:0})
         return {
           status: 0,
           message: 'create user success',
@@ -106,6 +111,7 @@ export class UserService {
         if(Object.keys(data)[0]){
           
         }
+        await this.walletModel.create({user_id:data._id,balance:0})
         let token = await this.createToken({
           email: data.email,
           role: data.role,
@@ -242,6 +248,25 @@ export class UserService {
   async fillAllUser() {
     try {
       let data = await this.userModel.find();
+
+      if (!data) {
+        return {
+          status: 1,
+          message: 'failed',
+        };
+      }
+      return {
+        status: 0,
+        message: 'suceess',
+        data,
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async fillSearchUser(email:any) {
+    try {
+      let data = await this.userModel.find({email:email});
 
       if (!data) {
         return {

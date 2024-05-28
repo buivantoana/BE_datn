@@ -13,12 +13,14 @@ import {
   RolePermissionModel,
 } from 'src/role_permission/schema/role_permission.schema';
 import { UserMiddleware } from 'src/middleware/authMidlware';
+import { Wallet, WalletModel } from 'src/wallet/schema/wallet.schema';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: User.name, schema: UserModel },
       { name: RolePermission.name, schema: RolePermissionModel },
+      { name: Wallet.name, schema: WalletModel },
     ]),
     MailModule,
   ],

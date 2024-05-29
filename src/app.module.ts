@@ -21,6 +21,7 @@ import { CommentsModule } from './comments/comments.module';
 import { noteModule } from './note/note.module';
 import { WalletModule } from './wallet/wallet.module';
 import { TransactionsModule } from './transactions/transactions.module';
+import { NotifyModule } from './notify/notify.module';
 
 
 @Module({
@@ -43,7 +44,8 @@ import { TransactionsModule } from './transactions/transactions.module';
     CommentsModule,
     noteModule,
     WalletModule,
-    TransactionsModule
+    TransactionsModule,
+    NotifyModule
   ],
 })
 export class AppModule {}

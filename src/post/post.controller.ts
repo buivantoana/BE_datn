@@ -34,6 +34,20 @@ export class PostController {
       };
     }
   }
+  @Post('likes/:id/:user_id')
+  async likePost(
+    @Param('id', new ValidationPipe({ transform: true })) id: idPostDto,
+    @Param('user_id', new ValidationPipe({ transform: true })) user_id: idPostDto,
+  ) {
+    try {
+      return await this.postService.likesPost(String(id),user_id);
+    } catch (error) {
+      return {
+        status: 1,
+        message: error,
+      };
+    }
+  }
   @Put(':id')
   async updatePost(
     @Param('id', new ValidationPipe({ transform: true })) id: idPostDto,

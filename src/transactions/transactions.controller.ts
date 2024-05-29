@@ -52,6 +52,24 @@ export class TransactionsController {
       };
     }
   }
+  @Put('withdraw_faild/:id')
+  async updateTransactionsWithdrawFaild(
+    @Param('id', new ValidationPipe({ transform: true })) id: idTransactionsDto,
+    @Body(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
+    transaction: any,
+  ) {
+    try {
+      return await this.transactionsService.updateTransactionsWithdrawFaild(
+        String(id),
+        transaction
+      );
+    } catch (error) {
+      return {
+        status: 1,
+        message: error,
+      };
+    }
+  }
   @Delete(':id')
   async deleteTransactions(
     @Param('id', new ValidationPipe({ transform: true })) id: idTransactionsDto,

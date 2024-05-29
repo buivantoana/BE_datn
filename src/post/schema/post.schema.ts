@@ -20,6 +20,11 @@ export class Post extends Document {
   active: boolean;
   @Prop({ required: true })
   notify: boolean;
+  @Prop({ required: true })
+  reward: boolean;
+  @Prop()
+  likes: [];
+  
   @Prop({ type: [{ type: MongooseSchema.Types.ObjectId, ref: 'User' }] })
   author: User[];
 }

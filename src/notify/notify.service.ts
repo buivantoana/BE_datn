@@ -1,18 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Transactions } from './schema/transaction.schema';
-import { ITransactions } from './interface/transactions.interface';
+import { Notify } from './schema/notify.schema';
+import { INotify } from './interface/notify.interface';
+
 
 @Injectable()
-export class TransactionsService {
+export class NotifyService {
   constructor(
-    @InjectModel(Transactions.name)
-    private readonly transactionsModel: Model<Transactions>,
+    @InjectModel(Notify.name)
+    private readonly notifyModel: Model<Notify>,
   ) {}
-  async createTransactions(transaction: ITransactions) {
+  async createNotify(notify: INotify) {
     try {
-      let data = await this.transactionsModel.create(transaction);
+      let data = await this.notifyModel.create(notify);
       if (!data) {
         return {
           status: 1,
@@ -28,18 +29,74 @@ export class TransactionsService {
       console.log(error);
     }
   }
-
-  async updateTransactions(id: string, status: any) {
+  async updateNotify(id: string, notify: INotify) {
     try {
-      let data = await this.transactionsModel.findOneAndUpdate(
+      let data = await this.notifyModel.findByIdAndUpdate(id, notify, {
+        new: true,
+      });
+      if (!data) {
+        return {
+          status: 1,
+          message: 'Không lấy được dữ liệu',
+        };
+      }
+      return {
+        status: 0,
+        message: 'suceess',
+        data,
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async deleteNotify(id: string) {
+    try {
+      let data = await this.notifyModel.findByIdAndDelete(id);
+      if (!data) {
+        return {
+          status: 1,
+          message: 'Không lấy được dữ liệu',
+        };
+      }
+      return {
+        status: 0,
+        message: 'suceess',
+        data,
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async findAllNotify() {
+    try {
+      let data = await this.notifyModel.find({});
+
+      if (!data) {
+        return {
+          status: 1,
+          message: 'Không lấy được dữ liệu',
+        };
+      }
+      return {
+        status: 0,
+        message: 'suceess',
+        data,
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async updateReadNotify(id: string) {
+    try {
+      let data = await this.notifyModel.findOneAndUpdate(
         { _id: id },
-        { $set: { status: status } },
+        { $set: { read: true } },
         { returnOriginal: false },
       );
       if (!data) {
         return {
           status: 1,
-          message: 'Không lấy được dữ liệu',
+          message: 'failed',
         };
       }
       return {
@@ -51,86 +108,9 @@ export class TransactionsService {
       console.log(error);
     }
   }
-  async updateTransactionsWithdrawFaild(id: string, transaction: any) {
+  async findUserNotify(id: string) {
     try {
-      let data = await this.transactionsModel.findOneAndReplace(
-        { _id: id },
-        transaction,
-        { returnOriginal: false, upsert: true },
-      );
-      if (!data) {
-        return {
-          status: 1,
-          message: 'Không lấy được dữ liệu',
-        };
-      }
-      return {
-        status: 0,
-        message: 'suceess',
-        data,
-      };
-    } catch (error) {
-      console.log(error);
-    }
-  }
-  async deleteTransactions(id: string) {
-    try {
-      let data = await this.transactionsModel.findByIdAndDelete(id);
-      if (!data) {
-        return {
-          status: 1,
-          message: 'Không lấy được dữ liệu',
-        };
-      }
-      return {
-        status: 0,
-        message: 'suceess',
-        data,
-      };
-    } catch (error) {
-      console.log(error);
-    }
-  }
-  async findAllTransactions() {
-    try {
-      let data = await this.transactionsModel.find({ type: 'withdraw' });
-
-      if (!data) {
-        return {
-          status: 1,
-          message: 'Không lấy được dữ liệu',
-        };
-      }
-      return {
-        status: 0,
-        message: 'suceess',
-        data,
-      };
-    } catch (error) {
-      console.log(error);
-    }
-  }
-  async findOneTransactions(id: string) {
-    try {
-      let data = await this.transactionsModel.findById(id);
-      if (!data) {
-        return {
-          status: 1,
-          message: 'Không lấy được dữ liệu',
-        };
-      }
-      return {
-        status: 0,
-        message: 'suceess',
-        data,
-      };
-    } catch (error) {
-      console.log(error);
-    }
-  }
-  async findUserTransactions(id: string) {
-    try {
-      let data = await this.transactionsModel.find({ user_id: [id] });
+      let data = await this.notifyModel.find({user_id:[id]});
       if (!data) {
         return {
           status: 1,

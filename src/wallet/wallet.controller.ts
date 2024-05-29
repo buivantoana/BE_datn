@@ -51,6 +51,24 @@ export class WalletController {
       };
     }
   }
+  @Put('reward/:id')
+  async updateRewardWallet(
+    @Param('id', new ValidationPipe({ transform: true })) id: idWalletsDto,
+    @Body(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
+    wallet: any,
+  ) {
+    try {
+      return await this.walletService.updateRewardWallet(
+        String(id),
+        wallet.amount,
+      );
+    } catch (error) {
+      return {
+        status: 1,
+        message: error,
+      };
+    }
+  }
   @Delete(':id')
   async deleteWallet(
     @Param('id', new ValidationPipe({ transform: true })) id: idWalletsDto,

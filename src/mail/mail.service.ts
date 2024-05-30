@@ -27,17 +27,7 @@ export class EmailService {
           alt=""
         />
         <h1 style="text-align: center; margin: 10px 0">Your Password</h1>
-        <p
-          style="
-            text-align: center;
-            font-size: 15px;
-            color: grey;
-            margin-top: 10px;
-          "
-        >
-          Bạn đã đăng ký thành công,trở thành hội viên của Aovis.Đây là mật khẩu
-          của bạn.
-        </p>
+       
         <button
           style="
             margin: 0 95px;

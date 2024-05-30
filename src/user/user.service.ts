@@ -83,7 +83,7 @@ export class UserService {
       if(user.type =="email"){
         let password = this.generateRandomPassword(6);
         let mail = await this.mailService.sendMail(
-          'toanbvph30125@fpt.edu.vn',
+          user.email,
           'Signup PassWord',
           password,
         );
@@ -264,6 +264,44 @@ export class UserService {
       console.log(error);
     }
   }
+  async otpEmail(email:any) {
+    try {
+      let data = await this.userModel.find({ email: email })
+      if (!data[0]) {
+        return {
+          status: 1,
+          message: 'Email không tồn tại',
+        };
+      }
+      let password = this.generateRandomPassword(6);
+      let mail = await this.mailService.sendMail(
+        email,
+        'Mã OTP',
+        password,
+      );
+      if (!mail) {
+        return {
+          status: 1,
+          message: 'gui mail that bai',
+        };
+      }
+      const otp = await sign(
+        {
+         password:password
+        },
+        this.secretKey,
+        { expiresIn: '1d' },
+      );
+      return {
+        status: 0,
+        message: 'Bạn vào Email lấy mã OTP',
+        otp:otp
+        
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  }
   async fillSearchUser(email:any) {
     try {
       let data = await this.userModel.find({email:email});
@@ -278,6 +316,61 @@ export class UserService {
         status: 0,
         message: 'suceess',
         data,
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async changePassword(value:any) {
+    try {
+      let data = await this.userModel.find({email:value.email});
+      if (!data) {
+        return {
+          status: 1,
+          message: 'failed',
+        };
+      }
+      let check_password = await bcrypt.compare(value.password, data[0].password);
+      if (!check_password) {
+        return {
+          status: 1,
+          message: 'Mật khẩu cũ bạn nhập sai.',
+        };
+      }
+      let password = await this.hashPassword(value.password_new);
+       let data_new = await this.userModel.findOneAndUpdate(
+        { _id: data[0]._id },
+        { $set: { password: password } },
+        { returnOriginal: false },
+      )
+      return {
+        status: 0,
+        message: 'suceess',
+        data:data_new,
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async forgotPassword(value:any) {
+    try {
+      let data = await this.userModel.find({email:value.email});
+      if (!data) {
+        return {
+          status: 1,
+          message: 'failed',
+        };
+      }
+      let password = await this.hashPassword(value.passwordNew);
+       let data_new = await this.userModel.findOneAndUpdate(
+        { _id: data[0]._id },
+        { $set: { password: password } },
+        { returnOriginal: false },
+      )
+      return {
+        status: 0,
+        message: 'suceess',
+        data:data_new,
       };
     } catch (error) {
       console.log(error);

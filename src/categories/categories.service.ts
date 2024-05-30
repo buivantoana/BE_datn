@@ -85,6 +85,34 @@ export class CategoriesService {
       console.log(error);
     }
   }
+  async findAllCategoriesWithCourses() {
+    try {
+      let data = await this.categoriesModel.aggregate([
+        {
+          $lookup: {
+            from: "courses",
+            localField: "_id",
+            foreignField: "category_id",
+            as: "courses",
+          },
+        },
+      ]);
+
+      if (!data) {
+        return {
+          status: 1,
+          message: 'Không lấy được dữ liệu',
+        };
+      }
+      return {
+        status: 0,
+        message: 'suceess',
+        data,
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  }
   async findOneCategories(id: string) {
     try {
       let data = await this.categoriesModel.findById(id);

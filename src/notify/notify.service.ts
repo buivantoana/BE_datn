@@ -120,7 +120,7 @@ export class NotifyService {
       return {
         status: 0,
         message: 'suceess',
-        data,
+        data:data.reverse(),
       };
     } catch (error) {
       console.log(error);

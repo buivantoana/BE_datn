@@ -150,6 +150,49 @@ export class UserController {
       };
     }
   }
+  @Put('change_password/user')
+  async changePassword(
+   
+    @Body(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
+    user: any,
+  ) {
+    try {
+      return await this.userService.changePassword(user);
+    } catch (error) {
+      return {
+        status: 1,
+        message: error,
+      };
+    }
+  }
+  @Put('forgot_password/user')
+  async forgotPassword(
+    @Body(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
+    user: any,
+  ) {
+    try {
+      return await this.userService.forgotPassword(user);
+    } catch (error) {
+      return {
+        status: 1,
+        message: error,
+      };
+    }
+  }
+  @Post('otp_email/user')
+  async otpEmail(
+    @Body(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
+    user: any,
+  ) {
+    try {
+      return await this.userService.otpEmail(user.email);
+    } catch (error) {
+      return {
+        status: 1,
+        message: error,
+      };
+    }
+  }
   @Put('profile/:id')
   async updateProfileUser(
     @Param('id', new ValidationPipe({ transform: true }))

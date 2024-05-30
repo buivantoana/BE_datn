@@ -74,6 +74,17 @@ export class CategoriesController {
       };
     }
   }
+  @Get('courses')
+  async findAllCategoriesCourses() {
+    try {
+      return await this.categoriesService.findAllCategoriesWithCourses();
+    } catch (error) {
+      return {
+        status: 1,
+        message: error,
+      };
+    }
+  }
   @Get(':id')
   async findOneCategories(
     @Param('id', new ValidationPipe({ transform: true })) id: idCategoriesDto,

@@ -10,6 +10,10 @@ export class CommentChildSchema {
   content: string;
   @Prop({ type: [{ type: MongooseSchema.Types.ObjectId, ref: 'User' }] })
   user_id: User[];
+  @Prop({ required: true })
+  report_spam: [];
+  @Prop({ required: true })
+  report_inappropriate: [];
 }
 @Schema({ timestamps: true, versionKey: false })
 export class Comments extends Document {
@@ -22,6 +26,10 @@ export class Comments extends Document {
   @Prop({ required: true })
   lesson_id: string;
   @Prop({ required: true })
+  report_spam: [];
+  @Prop({ required: true })
+  report_inappropriate: [];
+  @Prop({ type: [CommentChildSchema], default: [] })
   comments_child:[CommentChildSchema]
 }
 

@@ -3,6 +3,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Comments, CommentsModel } from './schema/comments.schema';
 import { AppGateway } from './comments.gateway';
 import { User, UserModel } from 'src/user/schema/user.schema';
+import { CommentController } from './comments.controller';
+import { CommentService } from './comments.service';
 
 
 
@@ -13,6 +15,7 @@ import { User, UserModel } from 'src/user/schema/user.schema';
       { name: User.name, schema: UserModel },
     ]),
   ],
-  providers: [AppGateway],
+  controllers:[CommentController],
+  providers: [AppGateway,CommentService],
 })
 export class CommentsModule {}

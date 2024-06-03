@@ -28,19 +28,20 @@ export class JwtAuthGuard implements CanActivate {
 
     try {
       const decodedToken: any = verify(token, 'token');
+      
       let data = await this.rolePermissionModel
         .find({})
         .populate(['permission', 'role_id'])
         .lean()
         .exec();
-
-       
+        console.log(data);
       if (
         data
           .filter((item) => item.role_id[0].name === decodedToken.role)[0]
           .permission.map((child) => child.name)
           .some((role: any) => role.includes(roles))
       ) {
+        console.log("t");
         return true;
       } else {
         response.status(200).json({

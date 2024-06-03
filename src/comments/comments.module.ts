@@ -5,6 +5,7 @@ import { AppGateway } from './comments.gateway';
 import { User, UserModel } from 'src/user/schema/user.schema';
 import { CommentController } from './comments.controller';
 import { CommentService } from './comments.service';
+import { Notify, NotifyModel } from 'src/notify/schema/notify.schema';
 
 
 
@@ -13,6 +14,7 @@ import { CommentService } from './comments.service';
     MongooseModule.forFeature([
       { name: Comments.name, schema: CommentsModel },
       { name: User.name, schema: UserModel },
+      { name: Notify.name, schema: NotifyModel },
     ]),
   ],
   controllers:[CommentController],

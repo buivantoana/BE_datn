@@ -3,5 +3,6 @@ export interface ISubLesson {
   description: String;
   duration: number;
   type: string;
+  source: string;
   lesson: string[];
 }

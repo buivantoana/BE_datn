@@ -10,6 +10,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from 'src/user/schema/user.schema';
 import { Comments } from './schema/comments.schema';
+import { Notify } from 'src/notify/schema/notify.schema';
 
 @WebSocketGateway({
   cors: {
@@ -22,6 +23,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
     private readonly commentModel: Model<Comments>,
 
     @InjectModel(User.name) private readonly userModel: Model<User>,
+    @InjectModel(Notify.name) private readonly notifyModel: Model<Notify>,
   ) {}
   @WebSocketServer() server: Server;
 
@@ -47,6 +49,24 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
         .exec();
       client.emit('allComments', comments);
       client.join(productId.courses_id);
+    } catch (error) {
+      console.error('Error fetching comments from the database:', error);
+    }
+  }
+  @SubscribeMessage('getCommentsNew')
+  async handleGetCommentsNew(client: Socket, payload: any) {
+    try {
+      const comments = await this.commentModel
+      .find({
+        courses_id: [payload.courses_id],
+        lesson_id: payload.lesson_id,
+      })
+      .populate(['user_id'])
+      .populate('comments_child.user_id')
+      .lean()
+      .exec();
+
+    this.server.to(payload.courses_id).emit('updatedComment', comments);
     } catch (error) {
       console.error('Error fetching comments from the database:', error);
     }
@@ -128,7 +148,6 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
           console.log('Comment not found');
         }
       } else {
-        console.log(payload);
         const comment: any = await this.commentModel.updateOne(
           { _id: payload.id },
           { comments_child: payload.dataEditComment },
@@ -207,6 +226,18 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
       this.server.emit('confirmEditPermission', { email: data.email });
     } catch (error) {
       console.error('Error updating comment in the database:', error);
+    }
+  }
+  @SubscribeMessage('getNewNotify')
+  async handleGetNewNotify(client: Socket, payload: any) {
+    try {
+      let data:any = await this.notifyModel.find({user_id:[payload.user_id]});
+      console.log(data.length);
+      if(data.length>0){
+        this.server.emit('notifyNew', {user_id:payload.user_id,data:data.reverse()});
+      }
+    } catch (error) {
+      console.error('Error fetching comments from the database:', error);
     }
   }
 }

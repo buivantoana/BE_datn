@@ -38,7 +38,7 @@ export class UserService {
         permission: user.permission,
       },
       this.secretKey,
-      { expiresIn: '20s' },
+      { expiresIn: '15m' },
     );
     return token;
   }
@@ -86,6 +86,7 @@ export class UserService {
           user.email,
           'Signup PassWord',
           password,
+          "signup"
         );
         if (!mail) {
           return {
@@ -154,6 +155,7 @@ export class UserService {
         'toanbvph30125@fpt.edu.vn',
         'Signup PassWord',
         password,
+        "signup"
       );
       if (!mail) {
         return {
@@ -278,6 +280,7 @@ export class UserService {
         email,
         'Mã OTP',
         password,
+        "signup"
       );
       if (!mail) {
         return {

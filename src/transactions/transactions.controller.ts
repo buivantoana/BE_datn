@@ -43,7 +43,8 @@ export class TransactionsController {
     try {
       return await this.transactionsService.updateTransactions(
         String(id),
-        transaction.status
+        transaction.status,
+        transaction.type
       );
     } catch (error) {
       return {

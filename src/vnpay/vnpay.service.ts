@@ -22,7 +22,15 @@ export class VnPayService {
     let tmnCode = 'ICP1188N';
     let secretKey = 'STCAXXDSGQFBOPWRZVYZLSFTVKBPOSON';
     let vnpUrl = 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html';
-    let returnUrl = type =="wallet"?`http://localhost:3000/my_wallet?order_id=${req.body.order_id}` :`http://localhost:3000/courses/${req.body.courses_id}?order_id=${req.body.order_id}`;
+    let returnUrl = ""
+    if(type =="wallet"){
+      returnUrl =`http://localhost:3000/my_wallet?order_id=${req.body.order_id}` 
+    }else if(type=="gift"){
+      returnUrl =`http://localhost:3000/learning/${req.body.courses_id}?order_id=${req.body.order_id}&user_id=${req.body.user_id}`;
+    }else{
+      returnUrl = `http://localhost:3000/courses/${req.body.courses_id}?order_id=${req.body.order_id}`;
+    }
+    
     let orderId = req.body.order_id;
     let amount = req.body.amount;
     let bankCode = null;

@@ -9,6 +9,7 @@ import {
   SubLesson,
   SubLessonModel,
 } from 'src/sublesson/schema/sublesson.schema';
+import { Post, PostModel } from 'src/post/schema/post.schema';
 
 @Module({
   imports: [
@@ -16,6 +17,9 @@ import {
     MongooseModule.forFeature([{ name: Lesson.name, schema: LessonModel }]),
     MongooseModule.forFeature([
       { name: SubLesson.name, schema: SubLessonModel },
+    ]),
+    MongooseModule.forFeature([
+      { name: Post.name, schema: PostModel },
     ]),
     CloudinaryModule,
   ],

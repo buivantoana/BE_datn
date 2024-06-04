@@ -92,6 +92,17 @@ export class CoursesController {
       };
     }
   }
+  @Get('search/:search')
+  async searchCourses( @Param('search', new ValidationPipe({ transform: true })) search: idCoursesDto,) {
+    try {
+      return await this.coursesService.searchCourses(search);
+    } catch (error) {
+      return {
+        status: 1,
+        message: error,
+      };
+    }
+  }
   @Get(':id')
   async findOneCourses(
     @Param('id', new ValidationPipe({ transform: true })) id: idCoursesDto,

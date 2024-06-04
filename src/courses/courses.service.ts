@@ -5,6 +5,7 @@ import { Courses } from './schema/courses.schema';
 import { ICourses } from './interface/courses.interface';
 import { Lesson } from 'src/lesson/schema/lesson.chema';
 import { SubLesson } from 'src/sublesson/schema/sublesson.schema';
+import { Post } from 'src/post/schema/post.schema';
 
 @Injectable()
 export class CoursesService {
@@ -15,6 +16,8 @@ export class CoursesService {
     private readonly lessonModel: Model<Lesson>,
     @InjectModel(SubLesson.name)
     private readonly sublessonModel: Model<SubLesson>,
+    @InjectModel(Post.name)
+    private readonly postModel: Model<Post>,
   ) {}
   async createCourses(courses: ICourses) {
     try {
@@ -214,6 +217,36 @@ export class CoursesService {
         status: 0,
         message: 'suceess',
         data,
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+
+
+  async searchCourses(search:any) {
+    try {
+       const regex = new RegExp(search, "i");
+      let dataCourses = await this.coursesModel
+        .find({ title: { $regex: regex } })
+        .exec();
+
+        let dataPost = await this.postModel
+        .find({ title: { $regex: regex } })
+        .exec();
+
+      if (!dataCourses) {
+        return {
+          status: 1,
+          message: 'Không lấy được dữ liệu',
+        };
+      }
+      return {
+        status: 0,
+        message: 'suceess',
+        dataCourses,
+        dataPost
       };
     } catch (error) {
       console.log(error);

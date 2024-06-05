@@ -23,6 +23,7 @@ import { WalletModule } from './wallet/wallet.module';
 import { TransactionsModule } from './transactions/transactions.module';
 import { NotifyModule } from './notify/notify.module';
 import { ContactModule } from './contact/contact.module';
+import { StarModule } from './star/star.module';
 
 
 @Module({
@@ -47,7 +48,8 @@ import { ContactModule } from './contact/contact.module';
     WalletModule,
     TransactionsModule,
     NotifyModule,
-    ContactModule
+    ContactModule,
+    StarModule
   ],
 })
 export class AppModule {}

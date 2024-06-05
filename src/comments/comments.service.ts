@@ -25,11 +25,11 @@ export class CommentService
   ) {}
   @WebSocketServer() server: Server;
   handleConnection(client: Socket) {
-    console.log(`Client connected: ${client.id}`);
+    // console.log(`Client connected: ${client.id}`);
   }
 
   handleDisconnect(client: Socket) {
-    console.log(`Client disconnected: ${client.id}`);
+    // console.log(`Client disconnected: ${client.id}`);
   }
 
   async reportCommentDad(value: any) {

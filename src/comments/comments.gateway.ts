@@ -232,7 +232,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
   async handleGetNewNotify(client: Socket, payload: any) {
     try {
       let data:any = await this.notifyModel.find({user_id:[payload.user_id]});
-      console.log(data.length);
+    
       if(data.length>0){
         this.server.emit('notifyNew', {user_id:payload.user_id,data:data.reverse()});
       }

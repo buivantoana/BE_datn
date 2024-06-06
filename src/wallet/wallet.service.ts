@@ -4,7 +4,6 @@ import { Model } from 'mongoose';
 import { Wallet } from './schema/wallet.schema';
 import { IWallet } from './interface/wallet.interface';
 
-
 @Injectable()
 export class WalletService {
   constructor(
@@ -49,12 +48,12 @@ export class WalletService {
       console.log(error);
     }
   }
-  async updateRewardWallet(id: string,amount:any) {
+  async updateRewardWallet(id: string, amount: any) {
     try {
       let data = await this.walletModel.updateOne(
         { user_id: id },
-        { $inc: { balance: Number(amount) } }
-      );;
+        { $inc: { balance: Number(amount) } },
+      );
       if (!data) {
         return {
           status: 1,
@@ -88,9 +87,16 @@ export class WalletService {
       console.log(error);
     }
   }
-  async findAllWallet() {
+  async findStatisticalWallet(user_id:any) {
     try {
-      let data = await this.walletModel.find({});
+      const startOfMonth = new Date();
+      startOfMonth.setDate(1);
+      startOfMonth.setHours(0, 0, 0, 0);
+      let data = await this.walletModel.find({
+        
+        user_id:[user_id],
+        date: { $gte: startOfMonth }
+      });
 
       if (!data) {
         return {
@@ -109,7 +115,7 @@ export class WalletService {
   }
   async findUserWallet(id: string) {
     try {
-      let data = await this.walletModel.find({user_id:[id]});
+      let data = await this.walletModel.find({ user_id: [id] });
       if (!data) {
         return {
           status: 1,

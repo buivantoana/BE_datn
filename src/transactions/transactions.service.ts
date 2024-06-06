@@ -156,4 +156,27 @@ export class TransactionsService {
       console.log(error);
     }
   }
+  async findStatisticalTransaction(id: any) {
+    try {
+      const startOfMonth = new Date();
+      startOfMonth.setDate(1);
+      startOfMonth.setHours(0, 0, 0, 0);
+      
+      let data = await this.transactionsModel.find({ user_id:[id],status:"completed",
+        createdAt: { $gte: startOfMonth } });
+      if (!data) {
+        return {
+          status: 1,
+          message: 'Không lấy được dữ liệu',
+        };
+      }
+      return {
+        status: 0,
+        message: 'suceess',
+        data:data.reverse(),
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }

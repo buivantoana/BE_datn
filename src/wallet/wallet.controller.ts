@@ -82,10 +82,12 @@ export class WalletController {
       };
     }
   }
-  @Get('')
-  async findAllWallet() {
+  @Get('statistical/:user_id')
+  async findStatisticalWallet(
+    @Param('user_id', new ValidationPipe({ transform: true })) user_id: idWalletsDto,
+  ) {
     try {
-      return await this.walletService.findAllWallet();
+      return await this.walletService.findStatisticalWallet(user_id);
     } catch (error) {
       return {
         status: 1,

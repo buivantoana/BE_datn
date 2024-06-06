@@ -121,4 +121,17 @@ export class TransactionsController {
       };
     }
   }
+  @Get('statistical/:user_id')
+  async findStatisticalTransaction(
+    @Param('user_id', new ValidationPipe({ transform: true })) user_id: idTransactionsDto,
+  ) {
+    try {
+      return await this.transactionsService.findStatisticalTransaction(user_id);
+    } catch (error) {
+      return {
+        status: 1,
+        message: error,
+      };
+    }
+  }
 }

@@ -114,10 +114,10 @@ export class PostService {
           updates.$set = { reward: true };
           await this.walletModel.updateOne(
             { user_id: data.author[0] },
-            { $inc: { balance: 10000 } }
+            { $inc: { balance: 100000 } }
           );
-          await this.transactionModel.create({type:"reward",amount:"10000",status:"completed",user_id:[data.author[0]],note:"Phần thuởng cho bài viết đạt được 1k tym"});
-          await this.notifyModel.create({user_id:[data.author[0]],title:"Bạn nhận đựơc 10.000Đ vào ví.",message:`Chúc mừng bài viết của bạn đã đạt 1k tym.Của bài viết ${data.title}`,url:"/my_wallet",read:false})
+          await this.transactionModel.create({type:"reward",amount:"100000",status:"completed",user_id:[data.author[0]],note:"Phần thuởng cho bài viết đạt được 1k tym"});
+          await this.notifyModel.create({user_id:[data.author[0]],title:"Bạn nhận đựơc 100.000Đ vào ví.",message:`Chúc mừng bài viết của bạn đã đạt 1k tym.Của bài viết ${data.title}`,url:"/my_wallet",read:false})
         }
   
         await this.postModel.updateOne(

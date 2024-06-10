@@ -22,7 +22,7 @@ export class TransactionsService {
           message: 'Không lấy được dữ liệu',
         };
       }
-      
+
       return {
         status: 0,
         message: 'suceess',
@@ -33,7 +33,7 @@ export class TransactionsService {
     }
   }
 
-  async updateTransactions(id: string, status: any,type:any) {
+  async updateTransactions(id: string, status: any, type: any) {
     try {
       let data = await this.transactionsModel.findOneAndUpdate(
         { _id: id },
@@ -46,10 +46,26 @@ export class TransactionsService {
           message: 'Không lấy được dữ liệu',
         };
       }
-      if(type=="rechanrge"){
-        await this.notifyModel.create({user_id:data.user_id,title:"Ví của bạn.",message:`Bạn vừa nạp thành công ${convertToVND(data.amount)} vào ví của mình.`,url:"/my_wallet",read:false})
-      }else if(type=="withdraw"){
-        await this.notifyModel.create({user_id:data.user_id,title:"Ví của bạn.",message:`Bạn vừa rút thành công ${convertToVND(data.amount)} từ ví ví của mình .`,url:"/my_wallet",read:false})
+      if (type == 'rechanrge') {
+        await this.notifyModel.create({
+          user_id: data.user_id,
+          title: 'Ví của bạn.',
+          message: `Bạn vừa nạp thành công ${convertToVND(
+            data.amount,
+          )} vào ví của mình.`,
+          url: '/my_wallet',
+          read: false,
+        });
+      } else if (type == 'withdraw') {
+        await this.notifyModel.create({
+          user_id: data.user_id,
+          title: 'Ví của bạn.',
+          message: `Bạn vừa rút thành công ${convertToVND(
+            data.amount,
+          )} từ ví ví của mình .`,
+          url: '/my_wallet',
+          read: false,
+        });
       }
       return {
         status: 0,
@@ -73,7 +89,15 @@ export class TransactionsService {
           message: 'Không lấy được dữ liệu',
         };
       }
-      await this.notifyModel.create({user_id:data.user_id,title:"Ví của bạn.",message:`Bạn vừa rút thất bại ${convertToVND(data.amount)} từ ví ví của mình.Ghi chú : ${data.note}`,url:"/my_wallet",read:false})
+      await this.notifyModel.create({
+        user_id: data.user_id,
+        title: 'Ví của bạn.',
+        message: `Bạn vừa rút thất bại ${convertToVND(
+          data.amount,
+        )} từ ví ví của mình.Ghi chú : ${data.note}`,
+        url: '/my_wallet',
+        read: false,
+      });
       return {
         status: 0,
         message: 'suceess',
@@ -150,7 +174,7 @@ export class TransactionsService {
       return {
         status: 0,
         message: 'suceess',
-        data:data.reverse(),
+        data: data.reverse(),
       };
     } catch (error) {
       console.log(error);
@@ -161,19 +185,45 @@ export class TransactionsService {
       const startOfMonth = new Date();
       startOfMonth.setDate(1);
       startOfMonth.setHours(0, 0, 0, 0);
-      
-      let data = await this.transactionsModel.find({ user_id:[id],status:"completed",
-        createdAt: { $gte: startOfMonth } });
+
+      let data = await this.transactionsModel.find({
+        user_id: [id],
+        status: 'completed',
+        createdAt: { $gte: startOfMonth },
+      });
       if (!data) {
         return {
           status: 1,
           message: 'Không lấy được dữ liệu',
         };
       }
+      console.log(data);
+      let rechanrge = 0;
+      let transfer = 0;
+      let withdraw = 0;
+      let purchase = 0;
+      let reward = 0;
+      data.map((item) => {
+        if (item.type == 'rechanrge') {
+          rechanrge += Number(item.amount);
+        } else if (item.type == 'transfer') {
+          transfer += Number(item.amount);
+        } else if (item.type == 'withdraw') {
+          withdraw += Number(item.amount);
+        } else if (item.type == 'purchase') {
+          purchase += Number(item.amount);
+        } else if (item.type == 'reward') {
+          reward += Number(item.amount);
+        }
+      });
       return {
         status: 0,
         message: 'suceess',
-        data:data.reverse(),
+        rechanrge,
+        transfer,
+        withdraw,
+        purchase,
+        reward,
       };
     } catch (error) {
       console.log(error);

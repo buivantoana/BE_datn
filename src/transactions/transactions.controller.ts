@@ -134,4 +134,17 @@ export class TransactionsController {
       };
     }
   }
+  @Get('statistical/admin/line')
+  async findStatisticalTransactionAdmin(
+  ) {
+    try {
+      
+      return await this.transactionsService.findStatisticalTransactionAdmin();
+    } catch (error) {
+      return {
+        status: 1,
+        message: error,
+      };
+    }
+  }
 }

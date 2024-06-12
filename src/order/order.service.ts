@@ -72,7 +72,12 @@ export class OrderService {
   }
   async findAllOrder() {
     try {
-      let data = await this.orderModel.find({});
+      let data = await this.orderModel.find({status:true}).populate([
+        'courses_id'
+        
+      ])
+      .lean()
+      .exec();;
 
       if (!data) {
         return {

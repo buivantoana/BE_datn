@@ -21,13 +21,24 @@ export class JwtAuthGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const response = context.switchToHttp().getResponse();
     const token = request.headers.authorization?.split(' ')[1];
-    console.log(token);
     if (!token) {
+      response.status(200).json({
+        status: 1,
+        message: 'Bạn không có quyền.',
+      });
       return false;
     }
 
     try {
-      const decodedToken: any = verify(token, 'token');
+      const decodedToken: any = await verify(token, 'token');
+      console.log(decodedToken);
+      if (!decodedToken) {
+        response.status(200).json({
+          status: 1,
+          message: 'Token bị hết hạn',
+        });
+        return false;
+      }
       
       let data = await this.rolePermissionModel
         .find({})
@@ -51,6 +62,10 @@ export class JwtAuthGuard implements CanActivate {
         return false;
       }
     } catch (error) {
+      response.status(200).json({
+        status: 1,
+        message: error.message,
+      });
       return false;
     }
   }

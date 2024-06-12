@@ -8,6 +8,7 @@ import {
   SubLesson,
   SubLessonModel,
 } from 'src/sublesson/schema/sublesson.schema';
+import { RolePermission, RolePermissionModel } from 'src/role_permission/schema/role_permission.schema';
 
 @Module({
   imports: [
@@ -15,6 +16,9 @@ import {
     MongooseModule.forFeature([{ name: Courses.name, schema: CoursesModel }]),
     MongooseModule.forFeature([
       { name: SubLesson.name, schema: SubLessonModel },
+    ]),
+    MongooseModule.forFeature([
+      { name: RolePermission.name, schema: RolePermissionModel},
     ]),
   ],
   controllers: [LessonController],

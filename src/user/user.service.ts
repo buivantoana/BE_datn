@@ -227,6 +227,7 @@ export class UserService {
   }
   async refeshtoken(token: string) {
     try {
+      console.log(token);
       const data: any = await verify(token, this.secretKey);
       const datanew = await this.userModel.findById(data._id);
       console.log(datanew);
@@ -245,11 +246,35 @@ export class UserService {
           datanew:datanew,
         };
       }
-    } catch (error) {}
+    } catch (error) {
+      return {
+        status: 1,
+        message: error.message,
+      }
+    }
   }
   async fillAllUser() {
     try {
       let data = await this.userModel.find();
+
+      if (!data) {
+        return {
+          status: 1,
+          message: 'failed',
+        };
+      }
+      return {
+        status: 0,
+        message: 'suceess',
+        data,
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async findCountUser() {
+    try {
+      const data = await this.userModel.countDocuments();
 
       if (!data) {
         return {

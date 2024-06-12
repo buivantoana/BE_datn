@@ -66,9 +66,31 @@ export class StarService {
       console.log(error);
     }
   }
- 
 
-  async findCoursesStar(id: string,type:any) {
+  async findAllStar() {
+    try {
+      let data = await this.starModel
+        .find()
+        .populate('courses_id')
+        .lean()
+        .exec();
+      if (!data) {
+        return {
+          status: 1,
+          message: 'Không lấy được dữ liệu',
+        };
+      }
+
+      return {
+        status: 0,
+        message: 'suceess',
+        data,
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async findCoursesStar(id: string, type: any) {
     try {
       let data = await this.starModel
         .find({ courses_id: [id] })
@@ -86,47 +108,44 @@ export class StarService {
         acc[star] = (acc[star] || 0) + 1;
         return acc;
       }, {});
-      let ratingPercentages:any
-      if(totalRatings==0){
-        ratingPercentages= {
+      let ratingPercentages: any;
+      if (totalRatings == 0) {
+        ratingPercentages = {
           one: 0,
-          two:  0,
+          two: 0,
           three: 0,
-          four:  0,
+          four: 0,
           fire: 0,
         };
-      }else{
-        ratingPercentages= {
+      } else {
+        ratingPercentages = {
           one: Math.floor(((ratingCounts[1] || 0) / totalRatings) * 100),
-          two:  Math.floor(((ratingCounts[2] || 0) / totalRatings) * 100),
-          three:  Math.floor(((ratingCounts[3] || 0) / totalRatings) * 100),
-          four:  Math.floor(((ratingCounts[4] || 0) / totalRatings) * 100),
-          fire:  Math.floor(((ratingCounts[5] || 0) / totalRatings) * 100),
+          two: Math.floor(((ratingCounts[2] || 0) / totalRatings) * 100),
+          three: Math.floor(((ratingCounts[3] || 0) / totalRatings) * 100),
+          four: Math.floor(((ratingCounts[4] || 0) / totalRatings) * 100),
+          fire: Math.floor(((ratingCounts[5] || 0) / totalRatings) * 100),
         };
       }
-      const averageRating = (
-        (ratingCounts[1] || 0) * 1 +
-        (ratingCounts[2] || 0) * 2 +
-        (ratingCounts[3] || 0) * 3 +
-        (ratingCounts[4] || 0) * 4 +
-        (ratingCounts[5] || 0) * 5
-      ) / totalRatings;
-      if(type=="all"){
+      const averageRating =
+        ((ratingCounts[1] || 0) * 1 +
+          (ratingCounts[2] || 0) * 2 +
+          (ratingCounts[3] || 0) * 3 +
+          (ratingCounts[4] || 0) * 4 +
+          (ratingCounts[5] || 0) * 5) /
+        totalRatings;
+      if (type == 'all') {
         return {
           status: 0,
           message: 'suceess',
           data,
           ratingPercentages,
-          averageRating
-  
+          averageRating,
         };
-
-      }else{
+      } else {
         return {
           status: 0,
           message: 'suceess',
-          averageRating
-  
+          averageRating,
         };
       }
     } catch (error) {

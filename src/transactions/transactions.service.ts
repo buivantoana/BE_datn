@@ -231,22 +231,22 @@ export class TransactionsService {
   }
   async findStatisticalTransactionAdmin() {
     try {
-      const today:any = new Date();
+      const today: any = new Date();
       const sevenDaysAgo = new Date(today);
       sevenDaysAgo.setDate(today.getDate() - 6);
       sevenDaysAgo.setHours(0, 0, 0, 0);
 
       let dataRechanrge = await this.transactionsModel.find({
-          type: "rechanrge",
-          status: 'completed',
-          createdAt: { $gte: sevenDaysAgo, $lte: today },
+        type: 'rechanrge',
+        status: 'completed',
+        createdAt: { $gte: sevenDaysAgo, $lte: today },
       });
       let dataWithdraw = await this.transactionsModel.find({
-          type: "withdraw",
-          status: 'completed',
-          createdAt: { $gte: sevenDaysAgo, $lte: today },
+        type: 'withdraw',
+        status: 'completed',
+        createdAt: { $gte: sevenDaysAgo, $lte: today },
       });
-      if (!dataRechanrge||!dataWithdraw) {
+      if (!dataRechanrge || !dataWithdraw) {
         return {
           status: 1,
           message: 'Không lấy được dữ liệu',
@@ -256,34 +256,40 @@ export class TransactionsService {
       const withdrawTotals = Array(7).fill(0);
       console.log(dataRechanrge);
       console.log(dataWithdraw);
-     
-      dataRechanrge.forEach((transaction:any) => {
-        const transactionDate:any = new Date(transaction.createdAt.toDateString());
-        const daysDifference = Math.floor((today - transactionDate) / (1000 * 60 * 60 * 24));
+
+      dataRechanrge.forEach((transaction: any) => {
+        const transactionDate: any = new Date(
+          transaction.createdAt.toDateString(),
+        );
+        const daysDifference = Math.floor(
+          (today - transactionDate) / (1000 * 60 * 60 * 24),
+        );
 
         if (daysDifference < 7) {
-            const index = 6 - daysDifference;
-            rechanrgeTotals[index] += parseFloat(transaction.amount);
+          const index = 6 - daysDifference;
+          rechanrgeTotals[index] += parseFloat(transaction.amount);
         }
-    });
+      });
 
-    dataWithdraw.forEach((transaction:any) => {
-        const transactionDate:any = new Date(transaction.createdAt.toDateString());
-        const daysDifference = Math.floor((today - transactionDate) / (1000 * 60 * 60 * 24));
+      dataWithdraw.forEach((transaction: any) => {
+        const transactionDate: any = new Date(
+          transaction.createdAt.toDateString(),
+        );
+        const daysDifference = Math.floor(
+          (today - transactionDate) / (1000 * 60 * 60 * 24),
+        );
 
         if (daysDifference < 7) {
-            const index = 6 - daysDifference;
-            withdrawTotals[index] += parseFloat(transaction.amount);
+          const index = 6 - daysDifference;
+          withdrawTotals[index] += parseFloat(transaction.amount);
         }
-    });
-
+      });
 
       return {
         status: 0,
         message: 'suceess',
         rechanrgeTotals,
-        withdrawTotals
-       
+        withdrawTotals,
       };
     } catch (error) {
       console.log(error);

@@ -9,16 +9,21 @@ import {
   Param,
   Put,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 
 import { Response, Request } from 'express';
 import { SubLessonService } from './sublesson.service';
 import { idSubLessonDto, SubLessonDto } from './dto/sublesson.dto';
+import { JwtAuthGuard } from 'src/guards/auth.guards';
+import { Roles } from 'src/guards/role.decorator';
 
 @Controller('sublesson')
+@UseGuards(JwtAuthGuard)
 export class SubLessonController {
   constructor(private subLessonService: SubLessonService) {}
   @Post('')
+  @Roles('create_courses')
   async createSubLesson(
     @Body(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
     lesson: any,
@@ -34,6 +39,7 @@ export class SubLessonController {
     }
   }
   @Put(':id')
+  @Roles('edit_courses')
   async updateSubLesson(
     @Param('id', new ValidationPipe({ transform: true })) id: idSubLessonDto,
     @Body(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
@@ -49,6 +55,7 @@ export class SubLessonController {
     }
   }
   @Delete(':id/:idLesson')
+  @Roles('delete_courses')
   async deleteSubLesson(
     @Param('id', new ValidationPipe({ transform: true })) id: idSubLessonDto,
     @Param('idLesson') idLesson: string,

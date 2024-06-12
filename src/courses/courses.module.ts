@@ -10,6 +10,7 @@ import {
   SubLessonModel,
 } from 'src/sublesson/schema/sublesson.schema';
 import { Post, PostModel } from 'src/post/schema/post.schema';
+import { RolePermission, RolePermissionModel } from 'src/role_permission/schema/role_permission.schema';
 
 @Module({
   imports: [
@@ -17,6 +18,9 @@ import { Post, PostModel } from 'src/post/schema/post.schema';
     MongooseModule.forFeature([{ name: Lesson.name, schema: LessonModel }]),
     MongooseModule.forFeature([
       { name: SubLesson.name, schema: SubLessonModel },
+    ]),
+    MongooseModule.forFeature([
+      { name: RolePermission.name, schema: RolePermissionModel},
     ]),
     MongooseModule.forFeature([
       { name: Post.name, schema: PostModel },

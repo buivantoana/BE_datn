@@ -9,16 +9,21 @@ import {
   Param,
   Put,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 
 import { Response, Request } from 'express';
 import { CategoriesService } from './categories.service';
 import { CategoriesDto, idCategoriesDto } from './dto/categories.dto';
+import { JwtAuthGuard } from 'src/guards/auth.guards';
+import { Roles } from 'src/guards/role.decorator';
 
 @Controller('categories')
+ @UseGuards(JwtAuthGuard)
 export class CategoriesController {
   constructor(private categoriesService: CategoriesService) {}
   @Post('')
+  @Roles('create_category')
   async createCategories(
     @Body(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
     category: CategoriesDto,
@@ -33,6 +38,7 @@ export class CategoriesController {
     }
   }
   @Put(':id')
+  @Roles('edit_category')
   async updateCategories(
     @Param('id', new ValidationPipe({ transform: true })) id: idCategoriesDto,
     @Body(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
@@ -51,6 +57,7 @@ export class CategoriesController {
     }
   }
   @Delete(':id')
+  @Roles('delete_category')
   async deleteCategories(
     @Param('id', new ValidationPipe({ transform: true })) id: idCategoriesDto,
   ) {

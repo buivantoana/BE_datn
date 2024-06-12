@@ -104,6 +104,18 @@ export class UserController {
       };
     }
   }
+  @Get('count')
+  // @Roles('create_user')
+  async findCountUser() {
+    try {
+      return await this.userService.findCountUser();
+    } catch (error) {
+      return {
+        status: 1,
+        message: error,
+      };
+    }
+  }
   @Get('search/:email')
   // @Roles('create_user')
   async fillSearchUser(

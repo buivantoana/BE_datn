@@ -24,6 +24,8 @@ import { TransactionsModule } from './transactions/transactions.module';
 import { NotifyModule } from './notify/notify.module';
 import { ContactModule } from './contact/contact.module';
 import { StarModule } from './star/star.module';
+import { VouchersModule } from './vouchers/vouchers.module';
+import { UserVouchersModule } from './user_vouchers/user_vouchers.module';
 
 
 @Module({
@@ -49,7 +51,9 @@ import { StarModule } from './star/star.module';
     TransactionsModule,
     NotifyModule,
     ContactModule,
-    StarModule
+    StarModule,
+    VouchersModule,
+    UserVouchersModule
   ],
 })
 export class AppModule {}

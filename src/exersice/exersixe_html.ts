@@ -72,25 +72,31 @@ export const ExerciseGetAtribute = (exercise, res) => {
 
         const img = document.querySelector("img");
         const a = document.querySelector("a");
+        const results = [];
+
         const imgTitle = img ? img.getAttribute("title") : null;
         if (!imgTitle || imgTitle.trim() === "") {
-            res.status(200).json({status:1, message: "Thiếu thuộc tính title cho thẻ img." });
-            return;
-        }
-        const href = a ? a.getAttribute("href") : null;
-        if (!href || href.trim() === "") {
-            res.status(200).json({status:1, message: "Thiếu thuộc tính href cho thẻ a." });
-            return;
-        }
-        const urlRegex = /^(ftp|http|https):\/\/[^ "]+$/;
-        if (!urlRegex.test(href)) {
-            res.status(200).json({status:1, message: "Giá trị của thuộc tính href không phải là một URL hợp lệ." });
-            return;
+            results.push({ status: false, message: "Thiếu thuộc tính title cho thẻ img." });
+        } else {
+            results.push({ status: true, message: "Đã tồn tại thuộc tính title cho thẻ img." });
         }
 
-        res.status(200).json({status:0, message: "Đã tồn tại thuộc tính title cho thẻ img và thuộc tính href cho thẻ a là một URL hợp lệ trong đoạn mã HTML." });
+        const href = a ? a.getAttribute("href") : null;
+        if (!href || href.trim() === "") {
+            results.push({ status: false, message: "Thiếu thuộc tính href cho thẻ a." });
+        } else if (!/^https?:\/\/.*/.test(href)) {
+            results.push({ status: false, message: "Giá trị của thuộc tính href không phải là một URL hợp lệ." });
+        } else {
+            results.push({ status: true, message: "Đã tồn tại thuộc tính href cho thẻ a và là một URL hợp lệ." });
+        }
+
+       
+            res.status(200).json({ status: 0,results });
+        
+
     } catch (error) {
-        res.status(200).json({status:1,message:error.message})
+        console.log(error);
+        res.status(500).json({ status: 1, message: error.message });
     }
 };
 // Thực hành sử dụng CSS internal
@@ -101,26 +107,36 @@ export const ExerciseCssInternal = (exercise, res) => {
         const document = dom.window.document;
         const h1 = document.querySelector("h1");
         const p = document.querySelector("p");
+
+        const results = [];
+
         const h1ComputedStyle = dom.window.getComputedStyle(h1);
         const h1Color = h1ComputedStyle.getPropertyValue("color");
         const redColor = "rgb(255, 0, 0)";
-        const greenColor = "rgb(0, 128, 0)";
         if (!h1Color || h1Color !== redColor) {
-            res.status(200).json({ message: "Thẻ h1 không có màu đỏ." });
-            return;
+            results.push({ status: false, message: "Thẻ h1 không có màu đỏ." });
+        } else {
+            results.push({ status: true, message: "Thẻ h1 có màu đỏ." });
         }
+
         const pComputedStyle = dom.window.getComputedStyle(p);
         const pColor = pComputedStyle.getPropertyValue("color");
+        const greenColor = "rgb(0, 128, 0)";
         if (!pColor || pColor !== greenColor) {
-            res.status(200).json({ message: "Thẻ p không có màu xanh." });
-            return;
+            results.push({ status: false, message: "Thẻ p không có màu xanh." });
+        } else {
+            results.push({ status: true, message: "Thẻ p có màu xanh." });
         }
-        res.status(200).json({ message: "Thẻ h1 có màu đỏ và thẻ p có màu xanh." });
+
+        res.status(200).json(results);
     } catch (error) {
         console.log(error);
+        res.status(500).json({ status: false, message: "Có lỗi xảy ra." });
     }
 };
 // Thực hành sử dụng CSS external
+
+
 export const ExerciseCssExternal = (exercise, res) => {
     try {
         let htmlCode = exercise;
@@ -129,6 +145,8 @@ export const ExerciseCssExternal = (exercise, res) => {
 
         const heading = document.querySelector("#heading");
         const paragraphs = document.querySelectorAll(".paragraph");
+
+        const results = [];
 
         const headingComputedStyle = dom.window.getComputedStyle(heading);
 
@@ -140,29 +158,41 @@ export const ExerciseCssExternal = (exercise, res) => {
         const headingFontSize = headingComputedStyle.getPropertyValue("font-size");
 
         if (!headingColor || headingColor !== redColor) {
-            res.status(200).json({status:1, message: "Color of heading is not red" });
-            return;
+            results.push({ status: false, message: "Color of heading is not red" });
+        } else {
+            results.push({ status: true, message: "Color of heading is red" });
         }
 
         if (!headingFontSize || headingFontSize !== fontSize) {
-            res.status(200).json({status:1, message: "Font size of heading is not 24px" });
-            return;
+            results.push({ status: false, message: "Font size of heading is not 24px" });
+        } else {
+            results.push({ status: true, message: "Font size of heading is 24px" });
         }
 
+        let allParagraphsGreen = true;
         paragraphs.forEach((paragraph) => {
             const paragraphComputedStyle = dom.window.getComputedStyle(paragraph);
             const paragraphColor = paragraphComputedStyle.getPropertyValue("color");
 
             if (paragraphColor !== greenColor) {
-                res.status(200).json({status:1, message: "Color of paragraph with class is not green" });
-                return;
+                allParagraphsGreen = false;
+                return; 
             }
         });
-        res.status(200).json({status:0, message: "Chúc mừng bạn đã hoàn thành bài tập" });
+
+        if (!allParagraphsGreen) {
+            results.push({ status: false, message: "Not all paragraphs with class have green color" });
+        } else {
+            results.push({ status: true, message: "All paragraphs with class have green color" });
+        }
+
+        res.status(200).json({status:0,results});
     } catch (error) {
         console.log(error);
+        res.status(500).json({ status: false, message: "Có lỗi xảy ra." });
     }
 };
+
 // Thực hành CSS selectors #1
 export const ExerciseCssSelectors = (exercise, res) => {
     try {

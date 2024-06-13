@@ -9,28 +9,34 @@ export const ExerciseAge = (exercise, res) => {
         if (typeof age !== 'undefined' && typeof nextAge !== 'undefined') {
           if (nextAge - age == 1) {
               if (${sentence}.includes('++')) {
-                 return res.status(200).json({
-                  status:1,
-                  message:"Bạn đã sử dụng toán tử ++ trong bài này, điều này không đúng với yêu cầu của đề bài."
-                 }) 
+                  return  res.status(200).json({
+                    status:0,
+                    results:[{status:false,message:"Bạn đã sử dụng toán tử ++ trong bài này, điều này không đúng với yêu cầu của đề bài."}],
+                    
+                   }) 
+                
               } else {
-                return res.status(200).json({
+                return  res.status(200).json({
                   status:0,
-                  message:"Chính xác! Biến nextAge có giá trị là 21 mà không sử dụng toán tử ++."
+                  results:[{status:true,message:"Chính xác! Biến nextAge có giá trị là 21 mà không sử dụng toán tử ++."}],
+                  
                  }) 
+                
               }
           } else {
-            return res.status(200).json({
-              status:1,
-              message:"Sai! Giá trị của biến nextAge không đúng."
+            return  res.status(200).json({
+              status:0,
+              results:[{status:false, message:"Sai! Giá trị của biến nextAge không đúng."}],
+              
              }) 
-            
           }
       } else {
-        return res.status(200).json({
-          status:1,
-          message:"Sai! Bạn chưa định nghĩa đúng biến age và nextAge."
+        return  res.status(200).json({
+          status:0,
+          results:[{status:false,  message:"Sai! Bạn chưa định nghĩa đúng biến age và nextAge."}],
+          
          }) 
+        
          
       }
       }catch(error){
@@ -40,10 +46,12 @@ export const ExerciseAge = (exercise, res) => {
       
       `);
   } catch (error) {
-    return res.status(200).json({
-      status: 1,
-      message: error.message,
-    });
+    return  res.status(200).json({
+      status:0,
+      results:[{status:false,  message: error.message,}],
+      
+     }) 
+    
   }
 };
 // Bắt đầu với một thử thách nhỏ
@@ -54,23 +62,36 @@ export const ExerciseAlert = (exercise, res) => {
       try{
         const check = ${sentence}.includes('alert');
                if(check){
-                 try {
-                   res.status(200).json({
-                    status:0,
-                    message:"Bạn đã viết đúng cú pháp câu lệnh alert"
-                   }) 
-                 } catch (err) {
-                  res.status(200).json({
-                    status:1,
-                    message:err.message
-                   }) 
-                 }
+                  try {
+                    new Function(${sentence})();
+                    res.status(200).json({
+                      status:0,
+                      results:[{status:true,message:"Bạn đã viết đúng cú pháp câu lệnh alert"}],
+                      code:${sentence}
+                     }) 
+                    } catch (err) {
+                      if(err.message=="alert is not defined"){
+                        res.status(200).json({
+                          status:0,
+                          results:[{status:true,message:"Bạn đã viết đúng cú pháp câu lệnh alert"}],
+                          code:${sentence}
+                         }) 
+                      }else{
+                        res.status(200).json({
+                          status:0,
+                          results:[{status:false,message:err.message}]
+                          
+                         }) 
+
+                      }
+                    }
+                 
                }else{
                 res.status(200).json({
-                  status:1,
-                  message:"Phải là câu lệnh alert"
+                  status:0,
+                  results:[{status:false,message:"Phải là câu lệnh alert"}]
+                  
                  }) 
-                
                }
       }catch(error){
         throw error;
@@ -79,8 +100,8 @@ export const ExerciseAlert = (exercise, res) => {
       `);
   } catch (error) {
     res.status(200).json({
-      status: 1,
-      message: error.message,
+      status: 0,
+      results: [{ status: false, message: error.message }],
     });
   }
 };
@@ -94,27 +115,33 @@ export const ExerciseWeight = (exercise, res) => {
           if (typeof weight === 'number') {
             res.status(200).json({
               status:0,
-              message:'Chúc mừng bạn đã hoàn thành thử thách'
+              results:[{status:true,message:'Chúc mừng bạn đã hoàn thành thử thách'}]
+              
              }) 
+            
           } else {
             res.status(200).json({
-              status:1,
-              message:"Biến weight không có giá trị hoặc không phải là số."
+              status:0,
+              results:[{status:false, message:"Biến weight không có giá trị hoặc không phải là số."}]
+              
              }) 
-           
           }
     } catch (error) {
       res.status(200).json({
-        status:1,
-        message:error.message
+        status:0,
+        results:[{status:false,message:error.message}]
+        
        }) 
+      
     }
         `);
   } catch (error) {
     res.status(200).json({
-      status: 1,
-      message: error.message,
-    });
+      status:0,
+      results:[{status:false,message: error.message,}]
+      
+     }) 
+   
   }
 };
 // Thực hành sử dụng console.log

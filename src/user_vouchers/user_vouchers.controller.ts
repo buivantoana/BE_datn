@@ -28,7 +28,7 @@ export class UserUserVouchersController {
  
   async createUserVouchers(
     @Body(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
-    Uservouchers: UserVouchersDto,
+    Uservouchers: any,
   ) {
     try {
       return await this.UserVouchersService.createUserVouchers(Uservouchers);
@@ -82,12 +82,26 @@ export class UserUserVouchersController {
     }
   }
  
-  @Get(':id')
-  async findOneUserVouchers(
+  @Get('user/:id')
+  async findUserVouchers(
     @Param('id', new ValidationPipe({ transform: true })) id: idUserVouchersDto,
   ) {
     try {
-      return await this.UserVouchersService.findOneUserVouchers(String(id));
+      return await this.UserVouchersService.findUserVouchers(String(id));
+    } catch (error) {
+      return {
+        status: 1,
+        message: error,
+      };
+    }
+  }
+ 
+  @Get(':id')
+  async getUsersWithoutVoucher(
+    @Param('id', new ValidationPipe({ transform: true })) id: idUserVouchersDto,
+  ) {
+    try {
+      return await this.UserVouchersService.getUsersWithoutVoucher(String(id));
     } catch (error) {
       return {
         status: 1,

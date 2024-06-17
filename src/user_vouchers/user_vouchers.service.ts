@@ -117,6 +117,8 @@ export class UserVouchersService {
       console.log(error);
     }
   }
+
+  
   async deleteUserVouchers(id: string) {
     try {
       let data = await this.UserVouchersModel.findByIdAndDelete(id);
@@ -161,6 +163,8 @@ export class UserVouchersService {
 
   async findUserVouchers(id: string) {
     try {
+      const now = new Date();
+      now.setHours(23, 59, 59, 999);
       let data = await this.UserVouchersModel.find({
         user_id: [id],
         status: false,
@@ -174,10 +178,18 @@ export class UserVouchersService {
           message: 'Không lấy được dữ liệu',
         };
       }
+      const filteredData = data.filter((userVoucher: any) => {
+        return userVoucher.vouchers_id.some((voucher: any) => {
+          const startDate = new Date(voucher.start_date);
+          const endDate = new Date(voucher.end_date);
+          endDate.setHours(23, 59, 59, 999)
+          return startDate <= now && endDate >= now;
+        });
+      });
       return {
         status: 0,
-        message: 'suceess',
-        data,
+        message: 'success',
+        data: filteredData,
       };
     } catch (error) {
       console.log(error);

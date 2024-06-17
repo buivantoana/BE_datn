@@ -26,9 +26,9 @@ export class VnPayService {
     if(type =="wallet"){
       returnUrl =`http://localhost:3000/my_wallet?order_id=${req.body.order_id}` 
     }else if(type=="gift"){
-      returnUrl =`http://localhost:3000/learning/${req.body.courses_id}?order_id=${req.body.order_id}&user_id=${req.body.user_id}`;
+      returnUrl =`http://localhost:3000/learning/${req.body.courses_id}?order_id=${req.body.order_id}&user_id=${req.body.user_id}&vouchers_id=${req.body.vouchers}`;
     }else{
-      returnUrl = `http://localhost:3000/courses/${req.body.courses_id}?order_id=${req.body.order_id}`;
+      returnUrl = `http://localhost:3000/courses/${req.body.courses_id}?order_id=${req.body.order_id}&vouchers_id=${req.body.vouchers}`;
     }
     
     let orderId = req.body.order_id;

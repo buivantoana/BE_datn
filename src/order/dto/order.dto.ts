@@ -4,6 +4,8 @@ export class OrderDto {
  
   @IsNotEmpty()
   readonly status: boolean;
+  @IsNotEmpty()
+  readonly price: number;
   @IsArray()
   readonly user_id: [string];
   @IsArray()

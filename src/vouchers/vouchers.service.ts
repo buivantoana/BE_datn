@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { IVouchers } from './interface/vouchers.interface';
 import { Vouchers } from './schema/vouchers.schema';
+import { UserVouchers } from 'src/user_vouchers/schema/user_vouchers.schema';
 
 
 
@@ -11,6 +12,8 @@ export class VouchersService {
   constructor(
     @InjectModel(Vouchers.name)
     private readonly VouchersModel: Model<Vouchers>,
+    @InjectModel(UserVouchers.name)
+    private readonly userVouchersModel: Model<UserVouchers>,
   ) {}
   async createVouchers(vouchers: IVouchers) {
     try {
@@ -59,6 +62,7 @@ export class VouchersService {
           message: 'Không lấy được dữ liệu',
         };
       }
+      await this.userVouchersModel.deleteMany({ 'vouchers_id': id });
       return {
         status: 0,
         message: 'suceess',

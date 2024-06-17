@@ -8,6 +8,8 @@ import { User } from 'src/user/schema/user.schema';
 export class Order extends Document {
   @Prop({ required: true })
   status: boolean;
+  @Prop({ required: true })
+  price: number;
   @Prop({ type: [{ type: MongooseSchema.Types.ObjectId, ref: 'Courses' }] })
   courses_id: Courses[];
   @Prop({ type: [{ type: MongooseSchema.Types.ObjectId, ref: 'User' }] })

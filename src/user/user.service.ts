@@ -51,14 +51,16 @@ export class UserService {
     try {
       let email = await this.userModel.find({ email: user.email });
       if (email[0]) {
-        if(user.type =="email"){
+        if (user.type == 'email') {
           return {
             status: 1,
-            message: 'Email da ton tai',
+            message: 'Email đã tồn tại',
           };
-
-        }else{
-          let data = await this.userModel.find({ email: user.email,uid:user.uid });
+        } else {
+          let data = await this.userModel.find({
+            email: user.email,
+            uid: user.uid,
+          });
           let token = await this.createToken({
             email: data[0].email,
             role: data[0].role,
@@ -80,39 +82,44 @@ export class UserService {
           };
         }
       }
-      if(user.type =="email"){
+      if (user.type == 'email') {
         let password = this.generateRandomPassword(6);
         let mail = await this.mailService.sendMail(
           user.email,
           'Signup PassWord',
           password,
-          "signup"
+          'signup',
         );
         if (!mail) {
           return {
             status: 1,
-            message: 'gui mail that bai',
+            message: 'Gửi Email thất bại',
           };
         }
         password = await this.hashPassword(password);
-  
-        const data:any =  await this.userModel.create({ ...user, password,image:{url:"",public_id:""} });
-        if(Object.keys(data)[0]){
-          
+
+        const data: any = await this.userModel.create({
+          ...user,
+          password,
+          image: { url: '', public_id: '' },
+        });
+        if (Object.keys(data)[0]) {
         }
-        await this.walletModel.create({user_id: data._id,balance:0})
+        await this.walletModel.create({ user_id: data._id, balance: 0 });
         return {
           status: 0,
-          message: 'create user success',
+          message: 'Tạo người dùng thành công',
           data,
         };
-      }else{
-        delete user.type
-        const data =  await this.userModel.create({ ...user,image:{url:"",public_id:""} });
-        if(Object.keys(data)[0]){
-          
+      } else {
+        delete user.type;
+        const data = await this.userModel.create({
+          ...user,
+          image: { url: '', public_id: '' },
+        });
+        if (Object.keys(data)[0]) {
         }
-        await this.walletModel.create({user_id:data._id,balance:0})
+        await this.walletModel.create({ user_id: data._id, balance: 0 });
         let token = await this.createToken({
           email: data.email,
           role: data.role,
@@ -130,10 +137,9 @@ export class UserService {
           status: 0,
           token,
           refeshToken,
-          data:[data],
+          data: [data],
         };
       }
-     
     } catch (error) {
       return {
         status: 1,
@@ -147,7 +153,7 @@ export class UserService {
       if (email[0]) {
         return {
           status: 1,
-          message: 'Email da ton tai',
+          message: 'Email đã tồn tại',
         };
       }
       let password = this.generateRandomPassword(6);
@@ -155,12 +161,12 @@ export class UserService {
         'toanbvph30125@fpt.edu.vn',
         'Signup PassWord',
         password,
-        "signup"
+        'signup',
       );
       if (!mail) {
         return {
           status: 1,
-          message: 'gui mail that bai',
+          message: 'Gửi Email thất bại',
         };
       }
       password = await this.hashPassword(password);
@@ -169,7 +175,7 @@ export class UserService {
 
       return {
         status: 0,
-        message: 'create user success',
+        message: 'Tạo người dùng thành công',
         data,
       };
     } catch (error) {
@@ -186,7 +192,7 @@ export class UserService {
       if (!data[0]) {
         return {
           status: 1,
-          message: 'email ko ton tai',
+          message: 'Email không tồn tại',
         };
       }
       let password = await bcrypt.compare(user.password, data[0].password);
@@ -194,7 +200,7 @@ export class UserService {
       if (!password) {
         return {
           status: 1,
-          message: 'Mat khau sai',
+          message: 'Mật khẩu sai',
         };
       }
 
@@ -243,14 +249,14 @@ export class UserService {
           status: 0,
           message: 'token refesh',
           accessToken: accessToken,
-          datanew:datanew,
+          datanew: datanew,
         };
       }
     } catch (error) {
       return {
         status: 1,
         message: error.message,
-      }
+      };
     }
   }
   async fillAllUser() {
@@ -291,9 +297,9 @@ export class UserService {
       console.log(error);
     }
   }
-  async otpEmail(email:any) {
+  async otpEmail(email: any) {
     try {
-      let data = await this.userModel.find({ email: email })
+      let data = await this.userModel.find({ email: email });
       if (!data[0]) {
         return {
           status: 1,
@@ -305,17 +311,17 @@ export class UserService {
         email,
         'Mã OTP',
         password,
-        "signup"
+        'signup',
       );
       if (!mail) {
         return {
           status: 1,
-          message: 'gui mail that bai',
+          message: 'Gửi Email thất bại',
         };
       }
       const otp = await sign(
         {
-         password:password
+          password: password,
         },
         this.secretKey,
         { expiresIn: '1d' },
@@ -323,16 +329,15 @@ export class UserService {
       return {
         status: 0,
         message: 'Bạn vào Email lấy mã OTP',
-        otp:otp
-        
+        otp: otp,
       };
     } catch (error) {
       console.log(error);
     }
   }
-  async fillSearchUser(email:any) {
+  async fillSearchUser(email: any) {
     try {
-      let data = await this.userModel.find({email:email});
+      let data = await this.userModel.find({ email: email });
 
       if (!data) {
         return {
@@ -349,16 +354,19 @@ export class UserService {
       console.log(error);
     }
   }
-  async changePassword(value:any) {
+  async changePassword(value: any) {
     try {
-      let data = await this.userModel.find({email:value.email});
+      let data = await this.userModel.find({ email: value.email });
       if (!data) {
         return {
           status: 1,
           message: 'failed',
         };
       }
-      let check_password = await bcrypt.compare(value.password, data[0].password);
+      let check_password = await bcrypt.compare(
+        value.password,
+        data[0].password,
+      );
       if (!check_password) {
         return {
           status: 1,
@@ -366,23 +374,23 @@ export class UserService {
         };
       }
       let password = await this.hashPassword(value.password_new);
-       let data_new = await this.userModel.findOneAndUpdate(
+      let data_new = await this.userModel.findOneAndUpdate(
         { _id: data[0]._id },
         { $set: { password: password } },
         { returnOriginal: false },
-      )
+      );
       return {
         status: 0,
         message: 'suceess',
-        data:data_new,
+        data: data_new,
       };
     } catch (error) {
       console.log(error);
     }
   }
-  async forgotPassword(value:any) {
+  async forgotPassword(value: any) {
     try {
-      let data = await this.userModel.find({email:value.email});
+      let data = await this.userModel.find({ email: value.email });
       if (!data) {
         return {
           status: 1,
@@ -390,15 +398,15 @@ export class UserService {
         };
       }
       let password = await this.hashPassword(value.passwordNew);
-       let data_new = await this.userModel.findOneAndUpdate(
+      let data_new = await this.userModel.findOneAndUpdate(
         { _id: data[0]._id },
         { $set: { password: password } },
         { returnOriginal: false },
-      )
+      );
       return {
         status: 0,
         message: 'suceess',
-        data:data_new,
+        data: data_new,
       };
     } catch (error) {
       console.log(error);
@@ -444,16 +452,19 @@ export class UserService {
   }
   async updateProfileUser(id: string, user: any) {
     try {
-      let data:any
-      if(user.type=="name"){
-        data = await this.userModel.findOneAndUpdate({ _id: id },
-         { $set: { user_name: user.body.user_name } },
-         { returnOriginal: false });
-
-      }else{
-        data = await this.userModel.findOneAndUpdate({ _id: id },
+      let data: any;
+      if (user.type == 'name') {
+        data = await this.userModel.findOneAndUpdate(
+          { _id: id },
+          { $set: { user_name: user.body.user_name } },
+          { returnOriginal: false },
+        );
+      } else {
+        data = await this.userModel.findOneAndUpdate(
+          { _id: id },
           { $set: { image: user.body.image } },
-          { returnOriginal: false });
+          { returnOriginal: false },
+        );
       }
 
       if (!data) {

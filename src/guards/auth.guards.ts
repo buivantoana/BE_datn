@@ -62,7 +62,8 @@ export class JwtAuthGuard implements CanActivate {
         return false;
       }
     } catch (error) {
-      response.status(200).json({
+      console.log(error);
+      response.status(error.name=="TokenExpiredError"?403:200).json({
         status: 1,
         message: error.message,
       });

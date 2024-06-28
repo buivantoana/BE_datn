@@ -26,6 +26,7 @@ import { ContactModule } from './contact/contact.module';
 import { StarModule } from './star/star.module';
 import { VouchersModule } from './vouchers/vouchers.module';
 import { UserVouchersModule } from './user_vouchers/user_vouchers.module';
+import { VietQrModule } from './vietqr/vietqr.module';
 
 
 @Module({
@@ -53,7 +54,8 @@ import { UserVouchersModule } from './user_vouchers/user_vouchers.module';
     ContactModule,
     StarModule,
     VouchersModule,
-    UserVouchersModule
+    UserVouchersModule,
+    VietQrModule
   ],
 })
 export class AppModule {}

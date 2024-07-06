@@ -15,9 +15,11 @@ export class Transactions extends Document {
   bankAccount?: string;
   @Prop()
   email_transfer?: string;
-   @Prop()
+  @Prop()
   stk?: string;
-   @Prop()
+  @Prop()
+  qr_code?: string;
+  @Prop()
   note?: string;
   @Prop({ type: [{ type: MongooseSchema.Types.ObjectId, ref: 'User' }] })
   user_id: User[];

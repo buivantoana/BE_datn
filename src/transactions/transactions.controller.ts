@@ -134,12 +134,13 @@ export class TransactionsController {
       };
     }
   }
-  @Get('statistical/admin/line')
+  @Get('statistical/admin/line/:date')
   async findStatisticalTransactionAdmin(
+    @Param('date', new ValidationPipe({ transform: true })) date: any,
   ) {
     try {
       
-      return await this.transactionsService.findStatisticalTransactionAdmin();
+      return await this.transactionsService.findStatisticalTransactionAdmin(date);
     } catch (error) {
       return {
         status: 1,
